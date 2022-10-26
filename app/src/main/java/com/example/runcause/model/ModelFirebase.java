@@ -37,7 +37,7 @@ public class ModelFirebase {
         db.setFirestoreSettings(settings);
     }
     public void getAllPosts(Long since, GetAllRunsListener listener) {
-        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("runs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 LinkedList<Run> postList = new LinkedList<Run>();

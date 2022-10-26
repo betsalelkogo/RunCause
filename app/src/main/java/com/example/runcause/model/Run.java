@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.runcause.MyApplication;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+
 public class Run {
     public final static String LAST_UPDATED = "LAST_UPDATE";
     @PrimaryKey
@@ -42,6 +44,7 @@ public class Run {
         this.startLant=startLant;
         this.isDeleted=isDeleted;
     }
+    @Ignore
     public Run() {
     }
 

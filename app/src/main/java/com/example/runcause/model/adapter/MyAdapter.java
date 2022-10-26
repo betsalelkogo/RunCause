@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.runcause.R;
 import com.example.runcause.model.Run;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 import com.squareup.picasso.Picasso;
@@ -38,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = fragment.getLayoutInflater().inflate(R.layout.post_wine_list_row, parent, false);
+        View view = fragment.getLayoutInflater().inflate(R.layout.run_list_row, parent, false);
         MyViewHolder holder = new MyViewHolder(view, listener);
         return holder;
     }

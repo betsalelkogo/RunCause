@@ -7,8 +7,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wineapp.R;
-import com.example.wineapp.model.intefaces.OnItemClickListener;
+import com.example.runcause.R;
+import com.example.runcause.model.intefaces.OnItemClickListener;
+
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
     TextView nameTv;

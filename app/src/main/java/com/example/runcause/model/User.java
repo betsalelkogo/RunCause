@@ -18,7 +18,7 @@ public class User implements Parcelable {
     private String password;
     private String email;
     private String imageUrl;
-    private String bYear;
+    public String bYear;
     private String weight;
     private String height;
 
