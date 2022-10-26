@@ -18,9 +18,9 @@ public class User implements Parcelable {
     private String password;
     private String email;
     private String imageUrl;
-    public String bYear;
     private String weight;
     private String height;
+    protected String bYear;
 
 
     public User(String name,String password,String email,String bYear,String weight,String height){
@@ -74,35 +74,6 @@ public class User implements Parcelable {
     public void setEmail(String email) {
         this.email=email;
     }
-
-    public Map<String,Object> toJson(){
-        Map<String, Object> json = new HashMap<>();
-        json.put("name", getName());
-        json.put("password", getPassword());
-        json.put("email", getEmail());
-        json.put("imageUrl", getImageUrl());
-        json.put("height", getHeight());
-        json.put("bYear", getbYear());
-        json.put("weight", getWeight());
-        return json;
-    }
-
-    static User fromJson(Map<String,Object> json){
-        String password = (String)json.get("password");
-        if (password == null){
-            return null;
-        }
-        String name = (String)json.get("name");
-        String email = (String)json.get("email");
-        String imageUrl = (String)json.get("imageUrl");
-        String height = (String)json.get("height");
-        String bYear = (String)json.get("bYear");
-        String weight = (String)json.get("weight");
-        User u = new User(name,password,email,bYear,weight,height);
-        u.setImageUrl(imageUrl);
-        return u;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -135,6 +106,36 @@ public class User implements Parcelable {
     public void setHeight(String height) {
         this.height = height;
     }
+
+    public Map<String,Object> toJson(){
+        Map<String, Object> json = new HashMap<>();
+        json.put("name", getName());
+        json.put("password", getPassword());
+        json.put("email", getEmail());
+        json.put("imageUrl", getImageUrl());
+        json.put("height", getHeight());
+        json.put("bYear", getbYear());
+        json.put("weight", getWeight());
+        return json;
+    }
+
+    static User fromJson(Map<String,Object> json){
+        String password = (String)json.get("password");
+        if (password == null){
+            return null;
+        }
+        String name = (String)json.get("name");
+        String email = (String)json.get("email");
+        String imageUrl = (String)json.get("imageUrl");
+        String height = (String)json.get("height");
+        String bYear = (String)json.get("bYear");
+        String weight = (String)json.get("weight");
+        User u = new User(name,password,email,bYear,weight,height);
+        u.setImageUrl(imageUrl);
+        return u;
+    }
+
+
 
     @Override
     public int describeContents() {

@@ -1,16 +1,17 @@
 package com.example.runcause;
-
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import com.example.runcause.model.adapter.PermissionCallback;
+
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -26,22 +27,22 @@ public class MainActivity extends AppCompatActivity {
 
         NavHostFragment nav_host = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_nav_host);
         navCtrl = nav_host.getNavController();
-        NavigationUI.setupActionBarWithNavController(this, navCtrl);
+        //NavigationUI.setupActionBarWithNavController(this, navCtrl);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (!super.onOptionsItemSelected(item)) {
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    navCtrl.navigateUp();
-                    return true;
-                default:
-                    return NavigationUI.onNavDestinationSelected(item, navCtrl);
-            }
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (!super.onOptionsItemSelected(item)) {
+//            switch (item.getItemId()) {
+//                case android.R.id.home:
+//                    navCtrl.navigateUp();
+//                    return true;
+//                default:
+//                    return NavigationUI.onNavDestinationSelected(item, navCtrl);
+//            }
+//        }
+//        return true;
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class StartAppFragment extends Fragment {
     Button registerBtn,signInBtn;
     View view;
-    FirebaseUser user;
+    FirebaseUser user=null;
     ProgressBar progressBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

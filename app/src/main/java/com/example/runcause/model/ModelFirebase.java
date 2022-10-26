@@ -36,7 +36,7 @@ public class ModelFirebase {
                 .build();
         db.setFirestoreSettings(settings);
     }
-    public void getAllPosts(Long since, GetAllRunsListener listener) {
+    public void getAllRuns(Long since, GetAllRunsListener listener) {
         db.collection("runs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -63,7 +63,7 @@ public class ModelFirebase {
 
     }
 
-    public void addRun(Run run, AddRunListener listener) {
+    public void addRun(@NonNull Run run, AddRunListener listener) {
         if(run.getId_key()==null){
             db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
                 .document().set(run.toJson())
@@ -135,7 +135,7 @@ public class ModelFirebase {
 
     }
 
-    public void addUser(User user, AddUserListener listener) {
+    public void addUser(@NonNull User user, AddUserListener listener) {
         db.collection(Constants.MODEL_FIRE_BASE_USER_COLLECTION)
                 .document(user.getEmail()).set(user.toJson())
                 .addOnSuccessListener((successListener)-> {

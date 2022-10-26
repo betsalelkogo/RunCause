@@ -35,7 +35,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view= inflater.inflate(R.layout.fragment_login, container, false);
-        enterBtn = view.findViewById(R.id.register_sign_up_btn);
+        enterBtn = view.findViewById(R.id.sign_up_btn);
         email=view.findViewById(R.id.sign_in_username_et);
         password=view.findViewById(R.id.sign_in_password_et);
         progressBar= view.findViewById(R.id.sign_in_progressbar);

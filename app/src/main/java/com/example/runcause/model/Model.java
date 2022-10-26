@@ -22,8 +22,8 @@ public class Model {
     MutableLiveData<List<Run>> runsListLd = new MutableLiveData<List<Run>>();
     ModelFirebase modelFirebase = new ModelFirebase();
     private  Model(){
-        loadingState.setValue(LoadingState.loaded);
-        reloadRunsList();
+        //loadingState.setValue(LoadingState.loaded);
+        //reloadRunsList();
     }
     public LiveData<List<Run>> getAll() {
         return runsListLd;
@@ -33,7 +33,7 @@ public class Model {
         //1. get local last update
         Long localLastUpdate = Run.getLocalLastUpdated();
         //2. get all students record since local last update from firebase
-        modelFirebase.getAllPosts(localLastUpdate,(list)->{
+        modelFirebase.getAllRuns(localLastUpdate,(list)->{
             if(list !=null){
                 MyApplication.executorService.execute(()->{
                     //3. update local last update date
@@ -82,7 +82,7 @@ public class Model {
     public LiveData<List<Run>> getProjectByName(String projectName) {
         return AppLocalDB.db.runDao().getRunByProject(projectName);
     }
-    public void DeletePost(Run run, DeleteRunListener listener){
+    public void DeleteRun(Run run, DeleteRunListener listener){
         run.setDeleted(true);
         addRun(run,()->{
             listener.onComplete();
