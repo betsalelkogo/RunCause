@@ -8,14 +8,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_page_project_list_tv"
-        android:layout_width="391dp"
-        android:layout_height="192dp"
+        android:layout_width="386dp"
+        android:layout_height="240dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_page_swipe_refresh"
-        app:layout_constraintVertical_bias="0.263" />
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/user_page_name_tv"
@@ -98,30 +97,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/user_page_swipe_refresh"
-        android:layout_width="400dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_page_email_tv">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/user_page_run_list_tv"
-            android:layout_width="328dp"
-            android:layout_height="329dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.313"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     <ProgressBar
         android:id="@+id/user_page_progressbar"
         style="@android:style/Widget.ProgressBar"
@@ -133,23 +108,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="117dp"
-        android:layout_height="27dp"
-        android:text="My Run History"
-        app:layout_constraintBottom_toTopOf="@+id/user_page_swipe_refresh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_page_email_tv" />
-
-    <TextView
         android:id="@+id/textView2"
         android:layout_width="174dp"
         android:layout_height="31dp"
+        android:layout_marginBottom="24dp"
         android:text="My Project Cause Run"
         app:layout_constraintBottom_toTopOf="@+id/user_page_project_list_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/add_project_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/user_page_project_list_tv"
+        app:layout_constraintVertical_bias="0.921" />
+
+    <Button
+        android:id="@+id/history_run_bth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="History"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_page_swipe_refresh" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.054" />
 </androidx.constraintlayout.widget.ConstraintLayout>

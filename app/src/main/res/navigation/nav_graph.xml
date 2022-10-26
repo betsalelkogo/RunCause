@@ -93,6 +93,9 @@
         <action
             android:id="@+id/action_runMapFragment_to_endRunFragment"
             app:destination="@id/endRunFragment" />
+        <action
+            android:id="@+id/action_runMapFragment_to_runScreenFragment"
+            app:destination="@id/runScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/editUserFragment"
