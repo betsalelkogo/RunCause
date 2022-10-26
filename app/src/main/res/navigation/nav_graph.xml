@@ -10,11 +10,14 @@
         android:label="fragment_start_app"
         tools:layout="@layout/fragment_start_app" >
         <action
+            android:id="@+id/action_startAppFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
             android:id="@+id/action_startAppFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_startAppFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            android:id="@+id/action_startAppFragment_to_projectRunListFragment"
+            app:destination="@id/projectRunListFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -31,8 +34,8 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_projectRunListFragment"
-            app:destination="@id/projectRunListFragment" />
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/projectRunListFragment"
@@ -45,6 +48,9 @@
         <action
             android:id="@+id/action_projectRunListFragment_to_runScreenFragment"
             app:destination="@id/runScreenFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.runcause.model.User" />
     </fragment>
     <fragment
         android:id="@+id/userHomePageFragment"

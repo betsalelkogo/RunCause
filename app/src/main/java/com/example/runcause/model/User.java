@@ -23,14 +23,14 @@ public class User implements Parcelable {
     private String height;
 
 
-    public User(String name,String password,String email,String imageUrl,String bYear,String weight,String height){
+    public User(String name,String password,String email,String bYear,String weight,String height){
         this.name=name;
         this.password=password;
         this.email=email;
-        this.imageUrl=imageUrl;
         this.bYear=bYear;
         this.weight=weight;
         this.height=height;
+        this.imageUrl=null;
     }
 
     protected User(Parcel in) {
@@ -98,7 +98,8 @@ public class User implements Parcelable {
         String height = (String)json.get("height");
         String bYear = (String)json.get("bYear");
         String weight = (String)json.get("weight");
-        User u = new User(name,password,email,imageUrl,bYear,weight,height);
+        User u = new User(name,password,email,bYear,weight,height);
+        u.setImageUrl(imageUrl);
         return u;
     }
 
