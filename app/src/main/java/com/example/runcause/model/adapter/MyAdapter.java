@@ -49,7 +49,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Run r = data.get(position);
         holder.nameTv.setText(r.getProjectId());
-        holder.detailsTv.setText(r.getDistance());
+        holder.targetKm.setText(r.getDistance());
+        holder.doneKm.setText(r.getDistance());
     }
 
     @Override

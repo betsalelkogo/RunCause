@@ -69,6 +69,9 @@
         <action
             android:id="@+id/action_userHomePageFragment_to_startAppFragment"
             app:destination="@id/startAppFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.runcause.model.User" />
     </fragment>
     <fragment
         android:id="@+id/runScreenFragment"
@@ -81,6 +84,9 @@
         <action
             android:id="@+id/action_runScreenFragment_to_runMapFragment"
             app:destination="@id/runMapFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.runcause.model.User" />
     </fragment>
     <fragment
         android:id="@+id/endRunFragment"

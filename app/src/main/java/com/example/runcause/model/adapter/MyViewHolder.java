@@ -13,14 +13,14 @@ import com.example.runcause.model.intefaces.OnItemClickListener;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
     TextView nameTv;
-    TextView detailsTv;
-    ImageView imageView;
+    TextView targetKm;
+    TextView doneKm;
 
     public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
         super(itemView);
         nameTv = itemView.findViewById(R.id.listrow_name_tv);
-        detailsTv = itemView.findViewById(R.id.listrow_details_tv);
-        imageView = itemView.findViewById(R.id.listrow_avatar_imv);
+        targetKm = itemView.findViewById(R.id.listrow_target_km_tv);
+        doneKm = itemView.findViewById(R.id.listrow_km_done_tv2);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
