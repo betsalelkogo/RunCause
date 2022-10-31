@@ -20,13 +20,17 @@ public class Model {
     MutableLiveData<LoadingState> loadingState= new MutableLiveData<LoadingState>();
     public LiveData<LoadingState> getLoadingState(){return loadingState;}
     MutableLiveData<List<Run>> runsListLd = new MutableLiveData<List<Run>>();
+    MutableLiveData<List<Project>> projectListLd = new MutableLiveData<List<Project>>();
     ModelFirebase modelFirebase = new ModelFirebase();
     private  Model(){
-        //loadingState.setValue(LoadingState.loaded);
-        //reloadRunsList();
+        loadingState.setValue(LoadingState.loaded);
+        reloadRunsList();
     }
     public LiveData<List<Run>> getAll() {
         return runsListLd;
+    }
+    public LiveData<List<Project>> getAllProject() {
+        return projectListLd;
     }
     public void reloadRunsList() {
         loadingState.setValue(LoadingState.loading);
@@ -95,6 +99,7 @@ public class Model {
     public void uploadImage(Bitmap bitmap, String name, final UploadImageListener listener){
         modelFirebase.uploadImage(bitmap,name,listener);
     }
+
 
 
 }
