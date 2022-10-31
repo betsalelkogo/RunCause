@@ -12,7 +12,7 @@ import com.example.runcause.MyApplication;
 abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract RunDao runDao();
     public abstract UserDao userDao();
-    public abstract UserDao projectDao();
+    public abstract ProjectDao projectDao();
 }
 
 

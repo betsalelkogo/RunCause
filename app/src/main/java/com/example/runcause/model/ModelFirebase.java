@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
+import com.example.runcause.model.intefaces.GetAllProjectListener;
 import com.example.runcause.model.intefaces.GetAllRunsListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
@@ -35,6 +36,31 @@ public class ModelFirebase {
                 .setPersistenceEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
+    }
+    public void getAllProject(Long since, GetAllProjectListener listener){
+        db.collection("projects").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                LinkedList<Project> prjectList = new LinkedList<Project>();
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        Project p = Project.fromJson(doc.getData());
+                        p.setId_key(doc.getId());
+                        if (p != null) {
+                            prjectList.add(p);
+                        }
+                    }
+                }else{
+
+                }
+                listener.onComplete(prjectList);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onComplete(null);
+            }
+        });
     }
     public void getAllRuns(Long since, GetAllRunsListener listener) {
         db.collection("runs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

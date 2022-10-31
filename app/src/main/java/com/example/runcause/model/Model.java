@@ -125,13 +125,13 @@ public class Model {
                     }
                     Project.setLocalLastUpdated(lLastUpdate);
                     //5. return all records to the caller
-                    List<Project> stList = AppLocalDB.db.projectDao().getAll();
-                    for (Project p: stList){
+                    List<Project> projectList = AppLocalDB.db.projectDao().getAll();
+                    for (Project p: projectList){
                         if(!p.isPublic()){
                             AppLocalDB.db.projectDao().delete(p);
                         }
                     }
-                    projectListLd.postValue(stList);
+                    projectListLd.postValue(projectList);
                     loadingState.postValue(LoadingState.loaded);
                 });
             }
