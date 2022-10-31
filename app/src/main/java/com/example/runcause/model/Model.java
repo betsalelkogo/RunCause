@@ -26,7 +26,7 @@ public class Model {
         loadingState.setValue(LoadingState.loaded);
         reloadRunsList();
     }
-    public LiveData<List<Run>> getAll() {
+    public LiveData<List<Run>> getAllRun() {
         return runsListLd;
     }
     public LiveData<List<Project>> getAllProject() {
@@ -101,5 +101,40 @@ public class Model {
     }
 
 
-
+    public void reloadProjectList() {
+        loadingState.setValue(LoadingState.loading);
+        //1. get local last update
+        Long localLastUpdate = Project.getLocalLastUpdated();
+        //2. get all students record since local last update from firebase
+        modelFirebase.getAllProject(localLastUpdate,(list)->{
+            if(list !=null){
+                MyApplication.executorService.execute(()->{
+                    //3. update local last update date
+                    //4. add new records to the local db
+                    Long lLastUpdate = new Long(0);
+                    for(Project p : list){
+                        if(p.isPublic()) {
+                            AppLocalDB.db.projectDao().insertAll(p);
+                        }
+                        else {
+                            AppLocalDB.db.projectDao().delete(p);
+                        }
+                        if (p.getLastUpdated() > lLastUpdate){
+                            lLastUpdate = p.getLastUpdated();
+                        }
+                    }
+                    Project.setLocalLastUpdated(lLastUpdate);
+                    //5. return all records to the caller
+                    List<Project> stList = AppLocalDB.db.projectDao().getAll();
+                    for (Project p: stList){
+                        if(!p.isPublic()){
+                            AppLocalDB.db.projectDao().delete(p);
+                        }
+                    }
+                    projectListLd.postValue(stList);
+                    loadingState.postValue(LoadingState.loaded);
+                });
+            }
+        });
+    }
 }

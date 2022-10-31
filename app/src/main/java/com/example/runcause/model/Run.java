@@ -2,6 +2,8 @@ package com.example.runcause.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 @Entity
 
-public class Run {
+public class Run implements Parcelable {
     public final static String LAST_UPDATED = "LAST_UPDATE";
     @PrimaryKey
     @NonNull
@@ -47,6 +49,35 @@ public class Run {
     @Ignore
     public Run() {
     }
+
+    protected Run(Parcel in) {
+        id_key = in.readString();
+        distance = in.readString();
+        projectId = in.readString();
+        date = in.readString();
+        time = in.readString();
+        calories = in.readString();
+        startLang = in.readDouble();
+        startLant = in.readDouble();
+        isDeleted = in.readByte() != 0;
+        if (in.readByte() == 0) {
+            lastUpdated = null;
+        } else {
+            lastUpdated = in.readLong();
+        }
+    }
+
+    public static final Creator<Run> CREATOR = new Creator<Run>() {
+        @Override
+        public Run createFromParcel(Parcel in) {
+            return new Run(in);
+        }
+
+        @Override
+        public Run[] newArray(int size) {
+            return new Run[size];
+        }
+    };
 
     public Map<String,Object> toJson(){
         Map<String, Object> json = new HashMap<>();
@@ -172,5 +203,29 @@ public class Run {
 
     public String getId_key() {
         return this.id_key;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id_key);
+        parcel.writeString(distance);
+        parcel.writeString(projectId);
+        parcel.writeString(date);
+        parcel.writeString(time);
+        parcel.writeString(calories);
+        parcel.writeDouble(startLang);
+        parcel.writeDouble(startLant);
+        parcel.writeByte((byte) (isDeleted ? 1 : 0));
+        if (lastUpdated == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(lastUpdated);
+        }
     }
 }
