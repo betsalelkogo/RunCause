@@ -27,22 +27,22 @@ public class MainActivity extends AppCompatActivity {
 
         NavHostFragment nav_host = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_nav_host);
         navCtrl = nav_host.getNavController();
-        //NavigationUI.setupActionBarWithNavController(this, navCtrl);
+        NavigationUI.setupActionBarWithNavController(this, navCtrl);
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if (!super.onOptionsItemSelected(item)) {
-//            switch (item.getItemId()) {
-//                case android.R.id.home:
-//                    navCtrl.navigateUp();
-//                    return true;
-//                default:
-//                    return NavigationUI.onNavDestinationSelected(item, navCtrl);
-//            }
-//        }
-//        return true;
-//    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (!super.onOptionsItemSelected(item)) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    navCtrl.navigateUp();
+                    return true;
+                default:
+                    return NavigationUI.onNavDestinationSelected(item, navCtrl);
+            }
+        }
+        return true;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

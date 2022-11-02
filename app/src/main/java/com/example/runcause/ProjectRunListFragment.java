@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -37,6 +40,7 @@ public class ProjectRunListFragment extends Fragment {
     User user;
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefresh;
+    ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment actionUser;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -94,7 +98,30 @@ public class ProjectRunListFragment extends Fragment {
 
 
 
-
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.project_list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        boolean result = true;
+        if (!super.onOptionsItemSelected(item)) {
+            switch (item.getItemId()) {
+                case R.id.userPage:
+                    actionUser = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user);
+                    progressBar.setVisibility(View.VISIBLE);
+                    Navigation.findNavController(view).navigate(actionUser);
+                    break;
+                default:
+                    result = false;
+                    break;
+            }
+        }
+        return result;
     }
 }
