@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 
 import com.example.runcause.MyApplication;
+import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.DeleteRunListener;
+import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 
@@ -76,6 +78,13 @@ public class Model {
         });
     }
 
+    public void addProject(Project project, AddProjectListener listener){
+        modelFirebase.addProject(project,()->{
+            reloadProjectList();
+            listener.onComplete();
+        });
+    }
+
     public void addUser(User user, AddUserListener listener){
         modelFirebase.addUser(user, () ->{
             listener.onComplete();
@@ -83,8 +92,8 @@ public class Model {
 
     }
 
-    public LiveData<List<Run>> getProjectByName(String projectName) {
-        return AppLocalDB.db.runDao().getRunByProject(projectName);
+    public void getProjectByName(String projectName, GetProjectByNameListener listener) {
+        modelFirebase.getProjectByName(projectName,listener);
     }
     public void DeleteRun(Run run, DeleteRunListener listener){
         run.setDeleted(true);
@@ -99,7 +108,6 @@ public class Model {
     public void uploadImage(Bitmap bitmap, String name, final UploadImageListener listener){
         modelFirebase.uploadImage(bitmap,name,listener);
     }
-
 
     public void reloadProjectList() {
         loadingState.setValue(LoadingState.loading);

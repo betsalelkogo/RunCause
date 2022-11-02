@@ -5,10 +5,12 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.GetAllProjectListener;
 import com.example.runcause.model.intefaces.GetAllRunsListener;
+import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -168,5 +170,47 @@ public class ModelFirebase {
                     listener.onComplete();
                 })
                 .addOnFailureListener((e)-> { });
+    }
+
+    public void addProject(@NonNull Project project, AddProjectListener listener) {
+        if(project.getId_key()==null){
+            db.collection(Constants.MODEL_FIRE_BASE_PROJECTS_COLLECTION)
+                    .document().set(project.toJson())
+                    .addOnSuccessListener((successListener)-> {
+                        listener.onComplete();
+                    })
+                    .addOnFailureListener((e)-> {
+                    });
+        }
+        else{
+            db.collection(Constants.MODEL_FIRE_BASE_PROJECTS_COLLECTION)
+                    .document(project.getId_key()).set(project.toJson())
+                    .addOnSuccessListener((successListener)-> {
+                        listener.onComplete();
+                    })
+                    .addOnFailureListener((e)-> {
+                    });
+        }
+    }
+
+    public void getProjectByName(String projectName, GetProjectByNameListener listener) {
+        DocumentReference docRef = db.collection(Constants.MODEL_FIRE_BASE_PROJECTS_COLLECTION).document(projectName);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Project project = Project.fromJson(document.getData());
+                        listener.onComplete(project);
+                    } else {
+                        listener.onComplete(null);
+                    }
+                } else {
+                    listener.onComplete(null);
+                }
+            }
+        });
+
     }
 }
