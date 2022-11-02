@@ -18,9 +18,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.RunCause"
-        tools:targetApi="31">
+        android:supportsRtl="false"
+        android:theme="@style/Theme.RunCause">
 
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -40,9 +39,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.RunCause.NoActionBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
