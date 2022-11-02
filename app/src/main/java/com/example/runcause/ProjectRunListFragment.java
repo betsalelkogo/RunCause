@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,13 +23,10 @@ import android.widget.ProgressBar;
 import com.example.runcause.UI.ListProjectFragmentViewModel;
 import com.example.runcause.model.LoadingState;
 import com.example.runcause.model.Model;
-import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
-import com.example.runcause.model.adapter.MyAdapter;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 
-import java.util.List;
 
 
 public class ProjectRunListFragment extends Fragment {
@@ -55,14 +51,11 @@ public class ProjectRunListFragment extends Fragment {
         user=ProjectRunListFragmentArgs.fromBundle(getArguments()).getUser();
         progressBar = view.findViewById(R.id.list_project_progressbar);
         swipeRefresh = view.findViewById(R.id.project_list_swipe_refresh);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefresh.setRefreshing(true);
-                Model.instance.reloadProjectList();
-                adapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
-            }
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(true);
+            Model.instance.reloadProjectList();
+            adapter.notifyDataSetChanged();
+            swipeRefresh.setRefreshing(false);
         });
         RecyclerView list = view.findViewById(R.id.project_list_rv);
         adapter = new AdapterProject();
@@ -73,22 +66,13 @@ public class ProjectRunListFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
         list.addItemDecoration(dividerItemDecoration);
         setHasOptionsMenu(true);
-        viewModel.getData().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
-            @Override
-            public void onChanged(List<Project> projects) {
-                adapter.setFragment(ProjectRunListFragment.this);
-                adapter.setData(projects);
-                adapter.notifyDataSetChanged();
-            }
+        viewModel.getData().observe(getViewLifecycleOwner(), projects -> {
+            adapter.setFragment(ProjectRunListFragment.this);
+            adapter.setData(projects);
+            adapter.notifyDataSetChanged();
         });
         progressBar.setVisibility(View.GONE);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                progressBar.setVisibility(View.VISIBLE);
-
-            }
-        });
+        adapter.setOnItemClickListener((position, v) -> progressBar.setVisibility(View.VISIBLE));
         swipeRefresh.setRefreshing(Model.instance.getLoadingState().getValue()== LoadingState.loading);
         Model.instance.getLoadingState().observe(getViewLifecycleOwner(),loadingState -> {
             swipeRefresh.setRefreshing(loadingState== LoadingState.loading);
@@ -102,13 +86,13 @@ public class ProjectRunListFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    public void onCreateOptionsMenu( Menu menu,  MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.project_list_menu, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected( MenuItem item) {
         boolean result = true;
         if (!super.onOptionsItemSelected(item)) {
             switch (item.getItemId()) {
