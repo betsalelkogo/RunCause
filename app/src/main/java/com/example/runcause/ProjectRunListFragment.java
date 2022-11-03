@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import com.example.runcause.UI.ListProjectFragmentViewModel;
 import com.example.runcause.model.LoadingState;
 import com.example.runcause.model.Model;
+import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
 import com.example.runcause.model.intefaces.OnItemClickListener;
@@ -37,6 +38,7 @@ public class ProjectRunListFragment extends Fragment {
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefresh;
     ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment actionUser;
+    Project project;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -72,16 +74,19 @@ public class ProjectRunListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
         progressBar.setVisibility(View.GONE);
-        adapter.setOnItemClickListener((position, v) -> progressBar.setVisibility(View.VISIBLE));
         swipeRefresh.setRefreshing(Model.instance.getLoadingState().getValue()== LoadingState.loading);
         Model.instance.getLoadingState().observe(getViewLifecycleOwner(),loadingState -> {
             swipeRefresh.setRefreshing(loadingState== LoadingState.loading);
         });
-
-
-
-
-
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                project = viewModel.getData().getValue().get(position);
+                ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
         return view;
     }
 
@@ -97,8 +102,9 @@ public class ProjectRunListFragment extends Fragment {
         if (!super.onOptionsItemSelected(item)) {
             switch (item.getItemId()) {
                 case R.id.userPage:
-                    actionUser = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user);
+                    actionUser = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
                     progressBar.setVisibility(View.VISIBLE);
+                    System.out.println(user);
                     Navigation.findNavController(view).navigate(actionUser);
                     break;
                 default:

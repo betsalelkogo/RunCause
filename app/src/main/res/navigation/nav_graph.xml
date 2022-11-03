@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    android:label="RunCause"
     app:startDestination="@id/startAppFragment">
     <fragment
         android:id="@+id/startAppFragment"
         android:name="com.example.runcause.StartAppFragment"
-        android:label="fragment_start_app"
-        tools:layout="@layout/fragment_start_app" >
+        tools:layout="@layout/fragment_start_app">
         <action
             android:id="@+id/action_startAppFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
@@ -22,8 +22,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.runcause.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_projectRunListFragment"
             app:destination="@id/projectRunListFragment" />
@@ -31,8 +31,8 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.runcause.RegisterFragment"
-        android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -40,8 +40,8 @@
     <fragment
         android:id="@+id/projectRunListFragment"
         android:name="com.example.runcause.ProjectRunListFragment"
-        android:label="fragment_project_run_list"
-        tools:layout="@layout/fragment_project_run_list" >
+        android:label="Run Project List"
+        tools:layout="@layout/fragment_project_run_list">
         <action
             android:id="@+id/action_projectRunListFragment_to_userHomePageFragment"
             app:destination="@id/userHomePageFragment" />
@@ -51,12 +51,15 @@
         <argument
             android:name="user"
             app:argType="com.example.runcause.model.User" />
+        <action
+            android:id="@+id/action_projectRunListFragment_to_addRunProjectFragment"
+            app:destination="@id/addRunProjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/userHomePageFragment"
         android:name="com.example.runcause.UserHomePageFragment"
-        android:label="fragment_user_home_page"
-        tools:layout="@layout/fragment_user_home_page" >
+        android:label="Home Page"
+        tools:layout="@layout/fragment_user_home_page">
         <action
             android:id="@+id/action_userHomePageFragment_to_editUserFragment"
             app:destination="@id/editUserFragment" />
@@ -72,12 +75,21 @@
         <argument
             android:name="user"
             app:argType="com.example.runcause.model.User" />
+        <action
+            android:id="@+id/action_userHomePageFragment_to_addRunProjectFragment"
+            app:destination="@id/addRunProjectFragment" />
+        <action
+            android:id="@+id/action_userHomePageFragment_self"
+            app:destination="@id/userHomePageFragment" />
+        <argument
+            android:name="project"
+            app:argType="com.example.runcause.model.Project" />
     </fragment>
     <fragment
         android:id="@+id/runScreenFragment"
         android:name="com.example.runcause.RunScreenFragment"
-        android:label="fragment_run_screen"
-        tools:layout="@layout/fragment_run_screen" >
+        android:label="Run Track"
+        tools:layout="@layout/fragment_run_screen">
         <action
             android:id="@+id/action_runScreenFragment_to_endRunFragment"
             app:destination="@id/endRunFragment" />
@@ -94,8 +106,8 @@
     <fragment
         android:id="@+id/endRunFragment"
         android:name="com.example.runcause.EndRunFragment"
-        android:label="fragment_end_run"
-        tools:layout="@layout/fragment_end_run" >
+        android:label="Run Details "
+        tools:layout="@layout/fragment_end_run">
         <action
             android:id="@+id/action_endRunFragment_to_runMapFragment"
             app:destination="@id/runMapFragment" />
@@ -109,8 +121,8 @@
     <fragment
         android:id="@+id/runMapFragment"
         android:name="com.example.runcause.RunMapFragment"
-        android:label="fragment_run_map"
-        tools:layout="@layout/fragment_run_map" >
+        android:label="Run Map Track"
+        tools:layout="@layout/fragment_run_map">
         <action
             android:id="@+id/action_runMapFragment_to_endRunFragment"
             app:destination="@id/endRunFragment" />
@@ -130,8 +142,8 @@
     <fragment
         android:id="@+id/editUserFragment"
         android:name="com.example.runcause.EditUserFragment"
-        android:label="fragment_edit_user"
-        tools:layout="@layout/fragment_edit_user" >
+        android:label="Edit User"
+        tools:layout="@layout/fragment_edit_user">
         <action
             android:id="@+id/action_editUserFragment_to_userHomePageFragment"
             app:destination="@id/userHomePageFragment" />
@@ -142,8 +154,8 @@
     <fragment
         android:id="@+id/userRunListFragment"
         android:name="com.example.runcause.UserRunListFragment"
-        android:label="fragment_user_run_list"
-        tools:layout="@layout/fragment_user_run_list" >
+        android:label="Mu run History"
+        tools:layout="@layout/fragment_user_run_list">
         <action
             android:id="@+id/action_userRunListFragment_to_runScreenFragment"
             app:destination="@id/runScreenFragment" />
@@ -153,6 +165,18 @@
         <action
             android:id="@+id/action_userRunListFragment_to_endRunFragment"
             app:destination="@id/endRunFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.runcause.model.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRunProjectFragment"
+        android:name="com.example.runcause.AddRunProjectFragment"
+        android:label="fragment_add_run_project"
+        tools:layout="@layout/fragment_add_run_project" >
+        <action
+            android:id="@+id/action_addRunProjectFragment_to_userHomePageFragment"
+            app:destination="@id/userHomePageFragment" />
         <argument
             android:name="user"
             app:argType="com.example.runcause.model.User" />
