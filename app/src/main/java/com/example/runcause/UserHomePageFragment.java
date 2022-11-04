@@ -58,7 +58,7 @@ public class UserHomePageFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_project_run_list, container, false);
         user=ProjectRunListFragmentArgs.fromBundle(getArguments()).getUser();
-        project=ProjectRunListFragmentArgs.fromBundle(getArguments()).getProject();
+        project=ProjectRunListFragmentArgs.fromBundle(getArguments()).getUser();
         userName= view.findViewById(R.id.user_page_name_tv);
         email= view.findViewById(R.id.user_page_email_tv);
         progressBar = view.findViewById(R.id.list_project_progressbar);
