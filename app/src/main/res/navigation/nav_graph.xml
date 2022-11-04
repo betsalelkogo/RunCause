@@ -78,9 +78,6 @@
         <action
             android:id="@+id/action_userHomePageFragment_to_addRunProjectFragment"
             app:destination="@id/addRunProjectFragment" />
-        <action
-            android:id="@+id/action_userHomePageFragment_self"
-            app:destination="@id/userHomePageFragment" />
         <argument
             android:name="project"
             app:argType="com.example.runcause.model.Project" />
@@ -172,8 +169,8 @@
     <fragment
         android:id="@+id/addRunProjectFragment"
         android:name="com.example.runcause.AddRunProjectFragment"
-        android:label="fragment_add_run_project"
-        tools:layout="@layout/fragment_add_run_project" >
+        android:label="Add New Project"
+        tools:layout="@layout/fragment_add_run_project">
         <action
             android:id="@+id/action_addRunProjectFragment_to_userHomePageFragment"
             app:destination="@id/userHomePageFragment" />

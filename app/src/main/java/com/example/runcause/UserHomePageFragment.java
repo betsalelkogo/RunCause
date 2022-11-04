@@ -1,8 +1,16 @@
 package com.example.runcause;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +32,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
+import com.example.runcause.model.Constants;
 import com.example.runcause.model.LoadingState;
 import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
+import com.example.runcause.model.intefaces.UploadImageListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserHomePageFragment extends Fragment {
     ListProjectFragmentViewModel viewModelProject;
@@ -56,13 +71,13 @@ public class UserHomePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_project_run_list, container, false);
-        user=ProjectRunListFragmentArgs.fromBundle(getArguments()).getUser();
-        project=ProjectRunListFragmentArgs.fromBundle(getArguments()).getUser();
+        view= inflater.inflate(R.layout.fragment_user_home_page, container, false);
+        user=UserHomePageFragmentArgs.fromBundle(getArguments()).getUser();
+        project=UserHomePageFragmentArgs.fromBundle(getArguments()).getProject();
         userName= view.findViewById(R.id.user_page_name_tv);
         email= view.findViewById(R.id.user_page_email_tv);
-        progressBar = view.findViewById(R.id.list_project_progressbar);
-        swipeRefresh = view.findViewById(R.id.project_list_swipe_refresh);
+        progressBar = view.findViewById(R.id.user_page_progressbar);
+        swipeRefresh = view.findViewById(R.id.user_home_page_swip_refresh);
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(true);
             Model.instance.reloadProjectList();
@@ -72,7 +87,7 @@ public class UserHomePageFragment extends Fragment {
         userImage=view.findViewById(R.id.user_page_image);
         editUserImg=view.findViewById(R.id.user_add_page_image_btn);
         addNewProjectBtn=view.findViewById(R.id.add_project_btn);
-        RecyclerView list = view.findViewById(R.id.project_list_rv);
+        RecyclerView list = view.findViewById(R.id.user_page_project_list_tv);
         adapter = new AdapterProject();
         list.setAdapter(adapter);
         list.setHasFixedSize(true);
@@ -92,9 +107,95 @@ public class UserHomePageFragment extends Fragment {
         Model.instance.getLoadingState().observe(getViewLifecycleOwner(),loadingState -> {
             swipeRefresh.setRefreshing(loadingState== LoadingState.loading);
         });
+        editUserImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editPhoto();
+            }
+        });
+        updateUserPage();
+        setHasOptionsMenu(true);
         return view;
     }
+    private void updateUserPage() {
+        userName.setText(user.getName());
+        email.setText(user.getEmail());
+        progressBar.setVisibility(View.GONE);
+        userImage.setImageResource(R.drawable.userpage);
+        if(user.getImageUrl()!=null){
+            Picasso.get().load(user.getImageUrl()).into(userImage);
+        }
+    }
 
+    private void editPhoto() {
+        Intent intent = getPickImageIntent(getActivity());
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constants.REQUEST_IMAGE_CAPTURE);
+    }
+    public static Intent getPickImageIntent(Context context) {
+        Intent chooserIntent = null;
+        List<Intent> intentList = new ArrayList<>();
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhotoIntent.putExtra("return-data", true);
+        intentList = addIntentsToList(context, intentList, pickIntent);
+        intentList = addIntentsToList(context, intentList, takePhotoIntent);
+
+        if (intentList.size() > 0) {
+            chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
+                    "Pick Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+        }
+
+        return chooserIntent;
+    }
+
+    private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
+        List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : resInfo) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            Intent targetedIntent = new Intent(intent);
+            targetedIntent.setPackage(packageName);
+            list.add(targetedIntent);
+        }
+        return list;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras;
+            Bitmap imageBitmap;
+            InputStream inputStream;
+            try {
+                if (data.getAction() != null && data.getAction().equals("inline-data")) {
+                    // take picture from camera
+                    extras = data.getExtras();
+                    imageBitmap = (Bitmap) extras.get("data");
+                } else {
+                    // pick from gallery
+                    inputStream = getActivity().getContentResolver().openInputStream(data.getData());
+                    imageBitmap = BitmapFactory.decodeStream(inputStream);
+                }
+                userImage.setImageBitmap(imageBitmap);
+                Model.instance.uploadImage(imageBitmap, user.getEmail(), new UploadImageListener() {
+                    @Override
+                    public void onComplete(String url) {
+                        if (url == null) {
+
+                        } else {
+                            user.setImageUrl(url);
+                            Model.instance.addUser(user, () -> {
+                                return;
+                            });
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);

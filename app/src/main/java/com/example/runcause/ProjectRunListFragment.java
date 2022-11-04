@@ -38,7 +38,7 @@ public class ProjectRunListFragment extends Fragment {
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefresh;
     ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment actionUser;
-    Project project;
+    Project project=new Project();
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

@@ -6,15 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".UserHomePageFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/user_page_project_list_tv"
-        android:layout_width="386dp"
-        android:layout_height="240dp"
-        android:layout_marginBottom="16dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/user_home_page_swip_refresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_page_progressbar"
+        app:layout_constraintVertical_bias="0.0">>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/user_page_project_list_tv"
+            android:layout_width="386dp"
+            android:layout_height="240dp"
+            android:layout_marginBottom="16dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/user_page_name_tv"
@@ -111,10 +119,10 @@
         android:id="@+id/textView2"
         android:layout_width="174dp"
         android:layout_height="31dp"
-        android:layout_marginBottom="24dp"
         android:text="My Project Cause Run"
-        app:layout_constraintBottom_toTopOf="@+id/user_page_project_list_tv"
+        app:layout_constraintBottom_toTopOf="@+id/user_home_page_swip_refresh"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
@@ -132,10 +140,10 @@
         android:id="@+id/history_run_bth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:text="History"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.078" />
 </androidx.constraintlayout.widget.ConstraintLayout>
