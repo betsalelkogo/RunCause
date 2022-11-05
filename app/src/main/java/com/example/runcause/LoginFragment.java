@@ -1,9 +1,11 @@
 package com.example.runcause;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.runcause.UI.ListProjectFragmentViewModel;
 import com.example.runcause.model.Model;
 import com.example.runcause.model.User;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
@@ -25,12 +28,18 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginFragment extends Fragment {
+    ListProjectFragmentViewModel viewModel;
     User user=null;
     EditText email, password;
     ProgressBar progressBar;
     Button enterBtn;
     private FirebaseAuth mAuth;
     View view;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(ListProjectFragmentViewModel.class);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,8 +77,15 @@ public class LoginFragment extends Fragment {
                                 @Override
                                 public void onComplete(User u) {
                                     user = u;
-                                    LoginFragmentDirections.ActionLoginFragmentToProjectRunListFragment action = LoginFragmentDirections.actionLoginFragmentToProjectRunListFragment(user);
-                                    Navigation.findNavController(view).navigate(action);
+                                    if(!checkIfProjectEmpty()) {
+                                        Toast.makeText(getActivity(), "No Run Projects", Toast.LENGTH_SHORT).show();
+                                        LoginFragmentDirections.ActionLoginFragmentToAddRunProjectFragment action=LoginFragmentDirections.actionLoginFragmentToAddRunProjectFragment(u);
+                                        Navigation.findNavController(view).navigate(action);
+                                    }
+                                    else{
+                                        LoginFragmentDirections.ActionLoginFragmentToProjectRunListFragment action = LoginFragmentDirections.actionLoginFragmentToProjectRunListFragment(user);
+                                        Navigation.findNavController(view).navigate(action);
+                                    }
                                 }
                             });
                         } else {
@@ -81,6 +97,9 @@ public class LoginFragment extends Fragment {
                         }
                     }
                 });
+    }
+    private boolean checkIfProjectEmpty() {
+        return viewModel.getData().getValue() == null;
     }
     private boolean validate() {
         return (email.getText().length() > 2 && password.getText().length() > 2);

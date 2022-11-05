@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -86,7 +87,6 @@ public class UserHomePageFragment extends Fragment {
         });
         userImage=view.findViewById(R.id.user_page_image);
         editUserImg=view.findViewById(R.id.user_add_page_image_btn);
-        addNewProjectBtn=view.findViewById(R.id.add_project_btn);
         RecyclerView list = view.findViewById(R.id.user_page_project_list_tv);
         adapter = new AdapterProject();
         list.setAdapter(adapter);

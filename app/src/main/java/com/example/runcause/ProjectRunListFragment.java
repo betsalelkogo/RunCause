@@ -18,7 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
 import com.example.runcause.model.LoadingState;
@@ -39,6 +41,7 @@ public class ProjectRunListFragment extends Fragment {
     SwipeRefreshLayout swipeRefresh;
     ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment actionUser;
     Project project=new Project();
+    ImageButton addProject;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -53,6 +56,7 @@ public class ProjectRunListFragment extends Fragment {
         user=ProjectRunListFragmentArgs.fromBundle(getArguments()).getUser();
         progressBar = view.findViewById(R.id.list_project_progressbar);
         swipeRefresh = view.findViewById(R.id.project_list_swipe_refresh);
+        addProject= view.findViewById(R.id.add_project_btn);
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(true);
             Model.instance.reloadProjectList();
@@ -87,7 +91,24 @@ public class ProjectRunListFragment extends Fragment {
                 Navigation.findNavController(v).navigate(action);
             }
         });
+
+        addProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProjectRunListFragmentDirections.ActionProjectRunListFragmentToAddRunProjectFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToAddRunProjectFragment(user);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
+        chekIfProjectEmpty();
+
         return view;
+    }
+
+    private void chekIfProjectEmpty() {
+        if(viewModel.getData().getValue()==null) {
+            Toast.makeText(getActivity(), "No Run Projects", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     @Override

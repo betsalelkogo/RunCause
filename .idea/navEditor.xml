@@ -17,6 +17,15 @@
                             <option name="y" value="826" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_addRunProjectFragment_to_userHomePageFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -73,6 +82,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_loginFragment_to_addRunProjectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_loginFragment_to_projectRunListFragment">
                               <value>
                                 <LayoutPositions />
@@ -94,6 +108,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_projectRunListFragment_to_addRunProjectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_projectRunListFragment_to_runScreenFragment">
                               <value>
                                 <LayoutPositions />
@@ -187,12 +206,17 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-178" />
-                            <option name="y" value="368" />
+                            <option name="x" value="-180" />
+                            <option name="y" value="366" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_startAppFragment_to_addRunProjectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_startAppFragment_to_loginFragment">
                               <value>
                                 <LayoutPositions />
@@ -224,6 +248,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_userHomePageFragment_to_addRunProjectFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_userHomePageFragment_to_editUserFragment">
                               <value>
                                 <LayoutPositions />

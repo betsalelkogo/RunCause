@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_startAppFragment_to_projectRunListFragment"
             app:destination="@id/projectRunListFragment" />
+        <action
+            android:id="@+id/action_startAppFragment_to_addRunProjectFragment"
+            app:destination="@id/addRunProjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -27,6 +30,9 @@
         <action
             android:id="@+id/action_loginFragment_to_projectRunListFragment"
             app:destination="@id/projectRunListFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_addRunProjectFragment"
+            app:destination="@id/addRunProjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
