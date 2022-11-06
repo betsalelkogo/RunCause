@@ -1,64 +1,85 @@
 package com.example.runcause;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddRunProjectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.runcause.model.Model;
+import com.example.runcause.model.Project;
+import com.example.runcause.model.User;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+
+
 public class AddRunProjectFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AddRunProjectFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddRunProjectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddRunProjectFragment newInstance(String param1, String param2) {
-        AddRunProjectFragment fragment = new AddRunProjectFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    View view;
+    EditText p_name,p_details, p_target,p_startDate,p_endDate;
+    Button cancelBtn, sendBtn;
+    ProgressBar progressBar;
+    CheckBox checkBox_Public;
+    User user;
+    Project p = new Project();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_run_project, container, false);
+        view = inflater.inflate(R.layout.fragment_add_run_project, container, false);
+        p_name=view.findViewById(R.id.add_project_name);
+        p_details=view.findViewById(R.id.add_project_details);
+        p_target=view.findViewById(R.id.add_project_km_target);
+        p_startDate=view.findViewById(R.id.add_project_start_date);
+        p_endDate=view.findViewById(R.id.add_project_end_date);
+        cancelBtn=view.findViewById(R.id.add_project_cancel_btn);
+        sendBtn=view.findViewById(R.id.add_project_upload_btn);
+        progressBar=view.findViewById(R.id.add_project_progressBar);
+        checkBox_Public=view.findViewById(R.id.checkBox_Public);
+        progressBar.setVisibility(View.GONE);
+
+        sendBtn.setOnClickListener(v -> {
+            if (!validate()) {
+                Toast.makeText(getActivity(), "Please check your input", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            save();
+        });
+        cancelBtn.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            AddRunProjectFragmentDirections.ActionAddRunProjectFragmentToUserHomePageFragment action1 = AddRunProjectFragmentDirections.actionAddRunProjectFragmentToUserHomePageFragment(user,p);
+            Navigation.findNavController(view).navigate(action1);
+        });
+        setHasOptionsMenu(true);
+
+        return view;
+    }
+    private void save() {
+        progressBar.setVisibility(View.VISIBLE);
+        sendBtn.setEnabled(false);
+        cancelBtn.setEnabled(false);
+        p.setProjectName(p_name.getText().toString());
+        p.setTtl(p_endDate.getText().toString());
+        p.setRunDistance("0");
+        p.setProjectDetails(p_details.getText().toString());
+        p.setTotalDistance(p_target.getText().toString());
+        p.setPublic(checkBox_Public.isChecked());
+        Model.instance.addProject(p, () -> Navigation.findNavController(sendBtn).navigateUp());
+
+    }
+    private boolean validate() {
+        return (p_name.getText().length() > 2 && p_details.getText().length() > 2&&p_target!=null&&checkBox_Public!=null&&p_endDate!=null);
     }
 }

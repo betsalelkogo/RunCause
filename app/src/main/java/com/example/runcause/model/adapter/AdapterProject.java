@@ -14,7 +14,7 @@ import com.example.runcause.model.intefaces.OnItemClickListener;
 
 import java.util.List;
 
-public class AdapterProject extends RecyclerView.Adapter<MyViewHolder> {
+public class AdapterProject extends RecyclerView.Adapter<ViewHolderProject> {
     OnItemClickListener listener;
     private List<Project> data;
     private Fragment fragment;
@@ -38,15 +38,15 @@ public class AdapterProject extends RecyclerView.Adapter<MyViewHolder> {
     }
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolderProject onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = fragment.getLayoutInflater().inflate(R.layout.ptoject_list_row, parent, false);
-        MyViewHolder holder = new MyViewHolder(view, listener);
+        ViewHolderProject holder = new ViewHolderProject(view, listener);
         return holder;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolderProject holder, int position) {
         Project p = data.get(position);
         holder.nameTv.setText(p.getProjectName());
         holder.targetKm.setText(p.getTotalDistance());

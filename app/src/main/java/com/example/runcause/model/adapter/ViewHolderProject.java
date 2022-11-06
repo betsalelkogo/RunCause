@@ -17,8 +17,8 @@ public class ViewHolderProject extends RecyclerView.ViewHolder{
     public ViewHolderProject(@NonNull View itemView, OnItemClickListener listener) {
         super(itemView);
         nameTv = itemView.findViewById(R.id.project_list_rv);
-        targetKm = itemView.findViewById(R.id.project_row_target_km_tv);
-        doneKm = itemView.findViewById(R.id.project_row_km_done_tv2);
+        targetKm = itemView.findViewById(R.id.project_row_target_km_tv1);
+        doneKm = itemView.findViewById(R.id.project_row_km_done_tv1);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

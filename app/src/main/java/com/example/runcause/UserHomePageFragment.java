@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -39,6 +38,7 @@ import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
+import com.example.runcause.model.intefaces.OnItemClickListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
@@ -102,7 +102,14 @@ public class UserHomePageFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
         progressBar.setVisibility(View.GONE);
-        adapter.setOnItemClickListener((position, v) -> progressBar.setVisibility(View.VISIBLE));
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user,viewModelProject.getData().getValue().get(position));
+                Navigation.findNavController(v).navigate(UserToNewRun);
+            }
+        });
         swipeRefresh.setRefreshing(Model.instance.getLoadingState().getValue()== LoadingState.loading);
         Model.instance.getLoadingState().observe(getViewLifecycleOwner(),loadingState -> {
             swipeRefresh.setRefreshing(loadingState== LoadingState.loading);

@@ -99,17 +99,11 @@ public class ProjectRunListFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
-        chekIfProjectEmpty();
 
         return view;
     }
 
-    private void chekIfProjectEmpty() {
-        if(viewModel.getData().getValue()==null) {
-            Toast.makeText(getActivity(), "No Run Projects", Toast.LENGTH_SHORT).show();
 
-        }
-    }
 
     @Override
     public void onCreateOptionsMenu( Menu menu,  MenuInflater inflater) {

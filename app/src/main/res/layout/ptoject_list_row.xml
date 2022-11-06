@@ -10,39 +10,59 @@
 
         <TextView
             android:id="@+id/project_row_km_done_tv2"
-            android:layout_width="98dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="24dp"
-            android:text="TextView"
+            android:layout_width="61dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="4dp"
+            android:text="Done:"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.075"
-            app:layout_constraintStart_toEndOf="@+id/project_row_target_km_tv"
+            app:layout_constraintStart_toEndOf="@+id/project_row_target_km_tv1"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintVertical_bias="0.538" />
 
         <TextView
             android:id="@+id/project_row_target_km_tv"
-            android:layout_width="94dp"
-            android:layout_height="29dp"
-            android:layout_marginStart="24dp"
-            android:text="TextView"
+            android:layout_width="130dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="4dp"
+            android:text="Run Target:"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/project_list_rv"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/project_list_rv"
-            android:layout_width="129dp"
-            android:layout_height="37dp"
+            android:layout_width="88dp"
+            android:layout_height="38dp"
             android:layout_marginStart="4dp"
 
             android:text="TextView"
-            android:textSize="30sp"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.038" />
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/project_row_target_km_tv1"
+            android:layout_width="48dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/project_row_target_km_tv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/project_row_km_done_tv1"
+            android:layout_width="44dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="4dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/project_row_km_done_tv2"
+            app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

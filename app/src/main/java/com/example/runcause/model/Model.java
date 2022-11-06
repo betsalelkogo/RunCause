@@ -26,6 +26,7 @@ public class Model {
     ModelFirebase modelFirebase = new ModelFirebase();
     private  Model(){
         loadingState.setValue(LoadingState.loaded);
+        reloadProjectList();
         reloadRunsList();
     }
     public LiveData<List<Run>> getAllRun() {

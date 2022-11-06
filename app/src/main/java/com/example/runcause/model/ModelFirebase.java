@@ -43,19 +43,19 @@ public class ModelFirebase {
         db.collection("projects").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<Project> prjectList = new LinkedList<Project>();
+                LinkedList<Project> projectList = new LinkedList<Project>();
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         Project p = Project.fromJson(doc.getData());
                         p.setId_key(doc.getId());
                         if (p != null) {
-                            prjectList.add(p);
+                            projectList.add(p);
                         }
                     }
                 }else{
 
                 }
-                listener.onComplete(prjectList);
+                listener.onComplete(projectList);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

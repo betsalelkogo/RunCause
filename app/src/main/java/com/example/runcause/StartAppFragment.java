@@ -80,6 +80,7 @@ public class StartAppFragment extends Fragment {
         setHasOptionsMenu(true);
 
         return view;
+
     }
 
     private boolean checkIfProjectEmpty() {
