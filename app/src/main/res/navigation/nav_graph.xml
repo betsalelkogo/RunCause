@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     android:label="RunCause"
+    android:gravity="center"
     app:startDestination="@id/startAppFragment">
     <fragment
         android:id="@+id/startAppFragment"
@@ -26,6 +27,7 @@
         android:id="@+id/loginFragment"
         android:name="com.example.runcause.LoginFragment"
         android:label="Login"
+        android:gravity="center"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_projectRunListFragment"
@@ -38,6 +40,7 @@
         android:id="@+id/registerFragment"
         android:name="com.example.runcause.RegisterFragment"
         android:label="Register"
+        android:gravity="center"
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
@@ -47,6 +50,7 @@
         android:id="@+id/projectRunListFragment"
         android:name="com.example.runcause.ProjectRunListFragment"
         android:label="Run Project List"
+        android:gravity="center"
         tools:layout="@layout/fragment_project_run_list">
         <action
             android:id="@+id/action_projectRunListFragment_to_userHomePageFragment"
@@ -65,6 +69,7 @@
         android:id="@+id/userHomePageFragment"
         android:name="com.example.runcause.UserHomePageFragment"
         android:label="Home Page"
+        android:gravity="center"
         tools:layout="@layout/fragment_user_home_page">
         <action
             android:id="@+id/action_userHomePageFragment_to_editUserFragment"
@@ -91,7 +96,8 @@
     <fragment
         android:id="@+id/runScreenFragment"
         android:name="com.example.runcause.RunScreenFragment"
-        android:label="Run Track"
+        android:label="Run Tracker"
+        android:gravity="center"
         tools:layout="@layout/fragment_run_screen">
         <action
             android:id="@+id/action_runScreenFragment_to_endRunFragment"
@@ -109,7 +115,8 @@
     <fragment
         android:id="@+id/endRunFragment"
         android:name="com.example.runcause.EndRunFragment"
-        android:label="Run Details "
+        android:label="Activity Details"
+        android:gravity="center"
         tools:layout="@layout/fragment_end_run">
         <action
             android:id="@+id/action_endRunFragment_to_runMapFragment"
@@ -124,7 +131,8 @@
     <fragment
         android:id="@+id/runMapFragment"
         android:name="com.example.runcause.RunMapFragment"
-        android:label="Run Map Track"
+        android:label="Run Map Tracker"
+        android:gravity="center"
         tools:layout="@layout/fragment_run_map">
         <action
             android:id="@+id/action_runMapFragment_to_endRunFragment"
@@ -145,7 +153,8 @@
     <fragment
         android:id="@+id/editUserFragment"
         android:name="com.example.runcause.EditUserFragment"
-        android:label="Edit User"
+        android:label="Edit Profile"
+        android:gravity="center"
         tools:layout="@layout/fragment_edit_user">
         <action
             android:id="@+id/action_editUserFragment_to_userHomePageFragment"
@@ -157,7 +166,8 @@
     <fragment
         android:id="@+id/userRunListFragment"
         android:name="com.example.runcause.UserRunListFragment"
-        android:label="Mu run History"
+        android:label="My Activity History"
+        android:gravity="center"
         tools:layout="@layout/fragment_user_run_list">
         <action
             android:id="@+id/action_userRunListFragment_to_runScreenFragment"
@@ -176,6 +186,7 @@
         android:id="@+id/addRunProjectFragment"
         android:name="com.example.runcause.AddRunProjectFragment"
         android:label="Add New Project"
+        android:gravity="center"
         tools:layout="@layout/fragment_add_run_project">
         <action
             android:id="@+id/action_addRunProjectFragment_to_userHomePageFragment"
