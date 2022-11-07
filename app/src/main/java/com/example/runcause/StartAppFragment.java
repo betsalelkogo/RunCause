@@ -113,6 +113,13 @@ public class StartAppFragment extends Fragment {
                     return;
                 }
                 validateUser();
+                dialog.dismiss();
+            }
+        });
+        cancelRegisterDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
     }
@@ -173,6 +180,8 @@ public class StartAppFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
                 save();
                 dialog.dismiss();
+                createNewContactDialogLogin();
+
             }
         });
 
