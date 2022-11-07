@@ -33,13 +33,13 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         Button signUpBtn = view.findViewById(R.id.register_sign_up_btn);
-        name=view.findViewById(R.id.register_user_name_et);
-        password=view.findViewById(R.id.register_password_et);
-        bYear=view.findViewById(R.id.bYear_et);
-        weight=view.findViewById(R.id.register_weight_et);
-        height=view.findViewById(R.id.register_height_et);
-        confirmPassword=view.findViewById(R.id.register_confirm_password_et);
-        email=view.findViewById(R.id.register_user_email_et);
+        name=view.findViewById(R.id.edit_user_name_et);
+        password=view.findViewById(R.id.edit_password_et);
+        bYear=view.findViewById(R.id.edit_bYear_et);
+        weight=view.findViewById(R.id.edit_weight_et);
+        height=view.findViewById(R.id.edit_height_et);
+        confirmPassword=view.findViewById(R.id.edit_confirm_password_et);
+        email=view.findViewById(R.id.edit_user_email_et);
         progressBar=view.findViewById(R.id.register_progressbar);
         progressBar.setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();

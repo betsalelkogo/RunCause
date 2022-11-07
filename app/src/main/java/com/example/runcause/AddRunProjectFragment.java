@@ -1,7 +1,5 @@
 package com.example.runcause;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,17 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
 
 
 public class AddRunProjectFragment extends Fragment {
@@ -44,12 +37,12 @@ public class AddRunProjectFragment extends Fragment {
         p_target=view.findViewById(R.id.add_project_km_target);
         p_startDate=view.findViewById(R.id.add_project_start_date);
         p_endDate=view.findViewById(R.id.add_project_end_date);
-        cancelBtn=view.findViewById(R.id.add_project_cancel_btn);
+        cancelBtn=view.findViewById(R.id.edit_cancel_btn);
         sendBtn=view.findViewById(R.id.add_project_upload_btn);
         progressBar=view.findViewById(R.id.add_project_progressBar);
         checkBox_Public=view.findViewById(R.id.checkBox_Public);
         progressBar.setVisibility(View.GONE);
-
+        user= AddRunProjectFragmentArgs.fromBundle(getArguments()).getUser();
         sendBtn.setOnClickListener(v -> {
             if (!validate()) {
                 Toast.makeText(getActivity(), "Please check your input", Toast.LENGTH_SHORT).show();
