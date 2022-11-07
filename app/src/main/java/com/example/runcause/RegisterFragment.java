@@ -40,7 +40,6 @@ public class RegisterFragment extends Fragment {
         height=view.findViewById(R.id.edit_height_et);
         confirmPassword=view.findViewById(R.id.edit_confirm_password_et);
         email=view.findViewById(R.id.edit_user_email_et);
-        progressBar=view.findViewById(R.id.register_progressbar);
         progressBar.setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         signUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +58,7 @@ public class RegisterFragment extends Fragment {
                                     // Sign up success, update UI with the signed-in user's information
                                     User user=new User(name.getText().toString(),password.getText().toString(),email.getText().toString(),bYear.getText().toString(),weight.getText().toString(),height.getText().toString());
                                     Model.instance.addUser(user, ()->{
-                                        Navigation.findNavController(v).navigate(R.id.action_registerFragment_to_loginFragment);
+                                       // Navigation.findNavController(v).navigate(R.id.action_registerFragment_to_loginFragment);
                                     });
                                 } else {
                                     // If sign up fails, display a message to the user.

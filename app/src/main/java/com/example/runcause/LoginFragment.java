@@ -47,7 +47,6 @@ public class LoginFragment extends Fragment {
         enterBtn = view.findViewById(R.id.sign_up_btn);
         email=view.findViewById(R.id.sign_in_username_et);
         password=view.findViewById(R.id.sign_in_password_et);
-        progressBar= view.findViewById(R.id.sign_in_progressbar);
         progressBar.setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         enterBtn.setOnClickListener(new View.OnClickListener() {
@@ -79,12 +78,12 @@ public class LoginFragment extends Fragment {
                                     user = u;
                                     if(!checkIfProjectEmpty()) {
                                         Toast.makeText(getActivity(), "No Run Projects", Toast.LENGTH_SHORT).show();
-                                        LoginFragmentDirections.ActionLoginFragmentToAddRunProjectFragment action=LoginFragmentDirections.actionLoginFragmentToAddRunProjectFragment(u);
-                                        Navigation.findNavController(view).navigate(action);
+                                        //LoginFragmentDirections.ActionLoginFragmentToAddRunProjectFragment action=LoginFragmentDirections.actionLoginFragmentToAddRunProjectFragment(u);
+                                        //Navigation.findNavController(view).navigate(action);
                                     }
                                     else{
-                                        LoginFragmentDirections.ActionLoginFragmentToProjectRunListFragment action = LoginFragmentDirections.actionLoginFragmentToProjectRunListFragment(user);
-                                        Navigation.findNavController(view).navigate(action);
+                                       // LoginFragmentDirections.ActionLoginFragmentToProjectRunListFragment action = LoginFragmentDirections.actionLoginFragmentToProjectRunListFragment(user);
+                                        //Navigation.findNavController(view).navigate(action);
                                     }
                                 }
                             });

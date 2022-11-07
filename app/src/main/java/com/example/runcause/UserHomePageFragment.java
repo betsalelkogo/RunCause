@@ -3,11 +3,13 @@ package com.example.runcause;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -17,6 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,6 +42,7 @@ import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
+import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,13 +53,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserHomePageFragment extends Fragment {
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    EditText name,email_et,bYear,weight,height;
+    Button saveEditUser, cancelEditUser;
     ListProjectFragmentViewModel viewModelProject;
     View view;
     TextView userName, email;
     User user;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToUserRunListFragment HomeToRunList;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToRunScreenFragment UserToNewRun;
-    UserHomePageFragmentDirections.ActionUserHomePageFragmentToEditUserFragment UserToEditUser;
+    UserHomePageFragmentDirections.ActionUserHomePageFragmentSelf UserToEditUser;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToAddRunProjectFragment UserToAddProject;
     SwipeRefreshLayout swipeRefresh;
     ImageButton editUserImg, addNewProjectBtn;
@@ -221,10 +230,8 @@ public class UserHomePageFragment extends Fragment {
                     Navigation.findNavController(view).navigate(HomeToRunList);
                     break;
                 case R.id.edit_user:
-                    UserToEditUser = UserHomePageFragmentDirections.actionUserHomePageFragmentToEditUserFragment(user);
-                    progressBar.setVisibility(View.VISIBLE);
-                    System.out.println(user);
-                    Navigation.findNavController(view).navigate(UserToEditUser);
+                    createNewContactDialog();
+
                     break;
                 case R.id.home_menu:
                     UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user,project);
@@ -248,5 +255,63 @@ public class UserHomePageFragment extends Fragment {
             }
         }
         return result;
+    }
+    private void update(){
+        name.setText(user.getName());
+        email_et.setText(user.getEmail());
+        bYear.setText(user.getbYear());
+        weight.setText(user.getWeight());
+        height.setText(user.getHeight());
+    }
+
+    private void save() {
+        progressBar.setVisibility(View.VISIBLE);
+        saveEditUser.setEnabled(false);
+        cancelEditUser.setEnabled(false);
+        user.setName(name.getText().toString());
+        user.setEmail(email_et.getText().toString());
+        user.setbYear(bYear.getText().toString());
+        user.setWeight(weight.getText().toString());
+        user.setHeight(height.getText().toString());
+        Model.instance.addUser(user,new AddUserListener(){
+            @Override
+            public void onComplete() {
+                UserToEditUser=UserHomePageFragmentDirections.actionUserHomePageFragmentSelf(user,project);
+                Navigation.findNavController(view).navigate(UserToEditUser);
+            }
+        });
+    }
+
+    public void createNewContactDialog(){
+        dialogBuilder=new AlertDialog.Builder(getContext());
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_edit_user,null);
+        saveEditUser= contactPopupView.findViewById(R.id.edit_save_btn);
+        cancelEditUser=contactPopupView.findViewById(R.id.edit_cancel_btn);
+       name=contactPopupView.findViewById(R.id.edit_user_name_et);
+       email_et=contactPopupView.findViewById(R.id.edit_user_email_et);
+       bYear=contactPopupView.findViewById(R.id.edit_bYear_et);
+       weight=contactPopupView.findViewById(R.id.edit_weight_et);
+       height=contactPopupView.findViewById(R.id.edit_height_et);
+       update();
+       dialogBuilder.setView(contactPopupView);
+       dialog=dialogBuilder.create();
+       dialog.show();
+
+
+        saveEditUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                save();
+                dialog.dismiss();
+            }
+        });
+
+        cancelEditUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 }

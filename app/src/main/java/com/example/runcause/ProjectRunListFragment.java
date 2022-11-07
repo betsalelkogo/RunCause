@@ -1,5 +1,6 @@
 package com.example.runcause;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,11 +30,15 @@ import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
+import com.example.runcause.model.adapter.MyAdapter;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 
 
 
 public class ProjectRunListFragment extends Fragment {
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    Button addProjectPopUp, cancelAddProject;
     ListProjectFragmentViewModel viewModel;
     View view;
     AdapterProject adapter;
@@ -85,10 +91,7 @@ public class ProjectRunListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                project = viewModel.getData().getValue().get(position);
-                ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
-                Navigation.findNavController(v).navigate(action);
+                createNewContactDialog(position,v);
             }
         });
 
@@ -129,4 +132,33 @@ public class ProjectRunListFragment extends Fragment {
         }
         return result;
     }
+    public void createNewContactDialog(int position,View v){
+        dialogBuilder=new AlertDialog.Builder(getContext());
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.popup_add_project_to_user,null);
+        addProjectPopUp= contactPopupView.findViewById(R.id.popup_project_yes);
+        cancelAddProject=contactPopupView.findViewById(R.id.popup_project_no);
+        dialogBuilder.setView(contactPopupView);
+        dialog=dialogBuilder.create();
+        dialog.show();
+
+
+        addProjectPopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                project = viewModel.getData().getValue().get(position);
+                ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
+                Navigation.findNavController(v).navigate(action);
+                dialog.dismiss();
+            }
+        });
+
+        cancelAddProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 }

@@ -11,40 +11,14 @@
         android:name="com.example.runcause.StartAppFragment"
         tools:layout="@layout/fragment_start_app">
         <action
-            android:id="@+id/action_startAppFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_startAppFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_startAppFragment_to_projectRunListFragment"
             app:destination="@id/projectRunListFragment" />
         <action
             android:id="@+id/action_startAppFragment_to_addRunProjectFragment"
             app:destination="@id/addRunProjectFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.runcause.LoginFragment"
-        android:label="Login"
-        android:gravity="center"
-        tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_projectRunListFragment"
+            android:id="@+id/action_startAppFragment_to_projectRunListFragment2"
             app:destination="@id/projectRunListFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_addRunProjectFragment"
-            app:destination="@id/addRunProjectFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/registerFragment"
-        android:name="com.example.runcause.RegisterFragment"
-        android:label="Register"
-        android:gravity="center"
-        tools:layout="@layout/fragment_register">
-        <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/projectRunListFragment"
@@ -72,9 +46,6 @@
         android:gravity="center"
         tools:layout="@layout/fragment_user_home_page">
         <action
-            android:id="@+id/action_userHomePageFragment_to_editUserFragment"
-            app:destination="@id/editUserFragment" />
-        <action
             android:id="@+id/action_userHomePageFragment_to_runScreenFragment"
             app:destination="@id/runScreenFragment" />
         <action
@@ -92,6 +63,9 @@
         <argument
             android:name="project"
             app:argType="com.example.runcause.model.Project" />
+        <action
+            android:id="@+id/action_userHomePageFragment_self"
+            app:destination="@id/userHomePageFragment" />
     </fragment>
     <fragment
         android:id="@+id/runScreenFragment"
@@ -149,19 +123,6 @@
         <argument
             android:name="run"
             app:argType="com.example.runcause.model.Run" />
-    </fragment>
-    <fragment
-        android:id="@+id/editUserFragment"
-        android:name="com.example.runcause.EditUserFragment"
-        android:label="Edit Profile"
-        android:gravity="center"
-        tools:layout="@layout/fragment_edit_user">
-        <action
-            android:id="@+id/action_editUserFragment_to_userHomePageFragment"
-            app:destination="@id/userHomePageFragment" />
-        <argument
-            android:name="user"
-            app:argType="com.example.runcause.model.User" />
     </fragment>
     <fragment
         android:id="@+id/userRunListFragment"
