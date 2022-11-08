@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
@@ -48,6 +49,7 @@ public class ProjectRunListFragment extends Fragment {
     ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment actionUser;
     Project project=new Project();
     ImageButton addProject;
+    TextView popup_text_v;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -92,6 +94,7 @@ public class ProjectRunListFragment extends Fragment {
             @Override
             public void onItemClick(int position, View v) {
                 createNewContactDialog(position,v);
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -137,6 +140,7 @@ public class ProjectRunListFragment extends Fragment {
         final View contactPopupView = getLayoutInflater().inflate(R.layout.popup_add_project_to_user,null);
         addProjectPopUp= contactPopupView.findViewById(R.id.popup_project_yes);
         cancelAddProject=contactPopupView.findViewById(R.id.popup_project_no);
+        popup_text_v=contactPopupView.findViewById(R.id.popup_text_v);
         dialogBuilder.setView(contactPopupView);
         dialog=dialogBuilder.create();
         dialog.show();
@@ -147,9 +151,17 @@ public class ProjectRunListFragment extends Fragment {
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 project = viewModel.getData().getValue().get(position);
-                ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
-                Navigation.findNavController(v).navigate(action);
-                dialog.dismiss();
+                if(!project.getName().equalsIgnoreCase(user.getName()))
+                {
+                    ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
+                    Navigation.findNavController(v).navigate(action);
+                    dialog.dismiss();
+                }
+                else{
+                    popup_text_v.setText("You already add this!");
+                    progressBar.setVisibility(View.GONE);
+
+                }
             }
         });
 
