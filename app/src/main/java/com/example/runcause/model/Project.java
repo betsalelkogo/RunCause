@@ -28,16 +28,18 @@ public class Project implements Parcelable {
     private String projectName;
     private String projectDetails;
     private String ttl;
+    private String name;
     private boolean isPublic;
     private Long lastUpdated = new Long(0);
 
-    public Project(String totalDistance,String runDistance,String ttl,boolean isPublic,String projectName,String projectDetails){
+    public Project(String totalDistance,String runDistance,String ttl,boolean isPublic,String projectName,String projectDetails,String name){
         this.totalDistance=totalDistance;
         this.runDistance=runDistance;
         this.ttl=ttl;
         this.isPublic=isPublic;
         this.projectDetails=projectDetails;
         this.projectName=projectName;
+        this.name=name;
     }
     @Ignore
     public Project() {
@@ -50,6 +52,7 @@ public class Project implements Parcelable {
         projectName = in.readString();
         projectDetails = in.readString();
         ttl = in.readString();
+        name = in.readString();
         isPublic = in.readByte() != 0;
         if (in.readByte() == 0) {
             lastUpdated = null;
@@ -78,6 +81,7 @@ public class Project implements Parcelable {
         json.put("isPublic", isPublic());
         json.put("projectName", getProjectName());
         json.put("projectDetails", getProjectDetails());
+        json.put("name", getName());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
     }
@@ -92,8 +96,9 @@ public class Project implements Parcelable {
         String runDistance = (String)json.get("runDistance");
         String ttl = (String)json.get("ttl");
         String projectDetails = (String)json.get("projectDetails");
+        String name = (String)json.get("name");
         boolean isPublic = (boolean)json.get("isPublic");
-        Project p = new Project(totalDistance,runDistance,ttl,isPublic,projectName,projectDetails);
+        Project p = new Project(totalDistance,runDistance,ttl,isPublic,projectName,projectDetails,name);
         p.setPublic(isPublic);
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
         p.setLastUpdated(new Long(ts.getSeconds()));
@@ -197,5 +202,13 @@ public class Project implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeLong(lastUpdated);
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

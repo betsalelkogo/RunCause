@@ -92,9 +92,12 @@ public class Model {
         });
 
     }
+    public LiveData<List<Project>> getRunByName(String name) {
+        return AppLocalDB.db.projectDao().getProjectByName(name);
+    }
 
-    public void getProjectByName(String projectName, GetProjectByNameListener listener) {
-        modelFirebase.getProjectByName(projectName,listener);
+    public LiveData<List<Project>> getProjectByName(String projectName) {
+        return AppLocalDB.db.projectDao().getProjectByName(projectName);
     }
     public void DeleteRun(Run run, DeleteRunListener listener){
         run.setDeleted(true);

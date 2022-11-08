@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -36,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
+import com.example.runcause.UI.UserProjectListFragmentViewModel;
 import com.example.runcause.model.Constants;
 import com.example.runcause.model.LoadingState;
 import com.example.runcause.model.Model;
@@ -57,7 +59,7 @@ public class UserHomePageFragment extends Fragment {
     private AlertDialog dialog;
     EditText name,email_et,bYear,weight,height;
     Button saveEditUser, cancelEditUser;
-    ListProjectFragmentViewModel viewModelProject;
+    UserProjectListFragmentViewModel viewModelProject;
     View view;
     TextView userName, email;
     User user;
@@ -66,7 +68,7 @@ public class UserHomePageFragment extends Fragment {
     UserHomePageFragmentDirections.ActionUserHomePageFragmentSelf UserToEditUser;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToAddRunProjectFragment UserToAddProject;
     SwipeRefreshLayout swipeRefresh;
-    ImageButton editUserImg, addNewProjectBtn;
+    ImageButton editUserImg;
     ImageView userImage;
     ProgressBar progressBar;
     AdapterProject adapter;
@@ -74,7 +76,7 @@ public class UserHomePageFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModelProject = new ViewModelProvider(this).get(ListProjectFragmentViewModel.class);
+        viewModelProject = new ViewModelProvider(this).get(UserProjectListFragmentViewModel.class);
     }
 
     @Override
@@ -83,6 +85,7 @@ public class UserHomePageFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_user_home_page, container, false);
         user=UserHomePageFragmentArgs.fromBundle(getArguments()).getUser();
+        viewModelProject.setData(user);
         project=UserHomePageFragmentArgs.fromBundle(getArguments()).getProject();
         userName= view.findViewById(R.id.user_page_name_tv);
         email= view.findViewById(R.id.user_page_email_tv);
@@ -105,10 +108,12 @@ public class UserHomePageFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
         list.addItemDecoration(dividerItemDecoration);
         setHasOptionsMenu(true);
-        viewModelProject.getData().observe(getViewLifecycleOwner(), projects -> {
+        viewModelProject.getData().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
+            @Override
+            public void onChanged(List<Project> posts) {
             adapter.setFragment(UserHomePageFragment.this);
-            adapter.setData(projects);
-            adapter.notifyDataSetChanged();
+            adapter.setData(viewModelProject.getData().getValue());
+            adapter.notifyDataSetChanged();}
         });
         progressBar.setVisibility(View.GONE);
         adapter.setOnItemClickListener(new OnItemClickListener() {

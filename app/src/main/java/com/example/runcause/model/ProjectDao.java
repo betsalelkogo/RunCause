@@ -19,6 +19,6 @@ public interface ProjectDao {
     @Delete
     void delete(Project project);
 
-    @Query("SELECT * FROM Project WHERE projectName=:projectName")
-    LiveData<List<Project>> getProjectByName(String projectName);
+    @Query("SELECT * FROM Project WHERE name=:name")
+    LiveData<List<Project>> getProjectByName(String name);
 }

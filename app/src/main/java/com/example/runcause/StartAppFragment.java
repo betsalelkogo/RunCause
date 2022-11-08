@@ -33,7 +33,7 @@ import java.net.DatagramPacket;
 public class StartAppFragment extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    EditText name,email_et,bYear,weight,height,password, confirmPassword;
+    EditText name,email_register,emailLogin,bYear,weight,height,password,passwordRegister, confirmPassword;
     Button registerDialog,loginDialog;
     ImageButton cancelRegisterDialog;
     ListProjectFragmentViewModel viewModel;
@@ -100,7 +100,7 @@ public class StartAppFragment extends Fragment {
         final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_login,null);
         loginDialog= contactPopupView.findViewById(R.id.sign_up_btn);
         cancelRegisterDialog=contactPopupView.findViewById(R.id.register_close_btn);
-        email_et=contactPopupView.findViewById(R.id.sign_in_username_et);
+        emailLogin=contactPopupView.findViewById(R.id.sign_in_username_et);
         password=contactPopupView.findViewById(R.id.sign_in_password_et);
         dialogBuilder.setView(contactPopupView);
         dialog=dialogBuilder.create();
@@ -124,7 +124,7 @@ public class StartAppFragment extends Fragment {
         });
     }
     private void validateUser() {
-        mAuth.signInWithEmailAndPassword(email_et.getText().toString(), password.getText().toString())
+        mAuth.signInWithEmailAndPassword(emailLogin.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -137,13 +137,13 @@ public class StartAppFragment extends Fragment {
                                 @Override
                                 public void onComplete(User u) {
                                     user1 = u;
-                                    if(!checkIfProjectEmpty()) {
+                                    if(checkIfProjectEmpty()) {
                                         Toast.makeText(getActivity(), "No Run Projects", Toast.LENGTH_SHORT).show();
                                         StartAppFragmentDirections.ActionStartAppFragmentToAddRunProjectFragment action=StartAppFragmentDirections.actionStartAppFragmentToAddRunProjectFragment(u);
                                         Navigation.findNavController(view).navigate(action);
                                     }
                                     else{
-                                        StartAppFragmentDirections.ActionStartAppFragmentToProjectRunListFragment action = StartAppFragmentDirections.actionStartAppFragmentToProjectRunListFragment(user1);
+                                        StartAppFragmentDirections.ActionStartAppFragmentToProjectRunListFragment action = StartAppFragmentDirections.actionStartAppFragmentToProjectRunListFragment(u);
                                         Navigation.findNavController(view).navigate(action);
                                     }
                                 }
@@ -163,11 +163,11 @@ public class StartAppFragment extends Fragment {
         registerDialog= contactPopupView.findViewById(R.id.register_sign_up_btn);
         cancelRegisterDialog=contactPopupView.findViewById(R.id.register_close_btn);
         name=contactPopupView.findViewById(R.id.edit_user_name_et);
-        email_et=contactPopupView.findViewById(R.id.edit_user_email_et);
+        email_register=contactPopupView.findViewById(R.id.edit_user_email_et);
         bYear=contactPopupView.findViewById(R.id.edit_bYear_et);
         weight=contactPopupView.findViewById(R.id.edit_weight_et);
         height=contactPopupView.findViewById(R.id.edit_height_et);
-        password=contactPopupView.findViewById(R.id.edit_password_et);
+        passwordRegister=contactPopupView.findViewById(R.id.edit_password_et);
         confirmPassword=contactPopupView.findViewById(R.id.edit_confirm_password_et);
         dialogBuilder.setView(contactPopupView);
         dialog=dialogBuilder.create();
@@ -201,13 +201,13 @@ public class StartAppFragment extends Fragment {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email_et.getText().toString(), password.getText().toString())
+        mAuth.createUserWithEmailAndPassword(email_register.getText().toString(), passwordRegister.getText().toString())
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign up success, update UI with the signed-in user's information
-                            User user=new User(name.getText().toString(),password.getText().toString(),email_et.getText().toString(),bYear.getText().toString(),weight.getText().toString(),height.getText().toString());
+                            User user=new User(name.getText().toString(),passwordRegister.getText().toString(),email_register.getText().toString(),bYear.getText().toString(),weight.getText().toString(),height.getText().toString());
                             Model.instance.addUser(user, ()->{
                                //open the login popup
                             });
@@ -221,10 +221,10 @@ public class StartAppFragment extends Fragment {
                 });
     }
     private boolean validate() {
-        return (name.getText().length() > 2 && confirmPassword.getText().length() > 5&&email_et.getText().length() > 2 && password.getText().length() > 5);
+        return (name.getText().length() > 2 && confirmPassword.getText().length() > 5&&email_register.getText().length() > 2 && passwordRegister.getText().length() > 5);
     }
     private boolean validateLogin() {
-        return (email_et.getText().length() > 2 && password.getText().length() > 2);
+        return (emailLogin.getText().length() > 2 && password.getText().length() > 2);
     }
     private boolean checkIfProjectEmpty() {
         return viewModel.getData().getValue() == null;
