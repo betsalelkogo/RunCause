@@ -50,39 +50,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="loginFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="172" />
-                            <option name="y" value="543" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_loginFragment_to_addRunProjectFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_loginFragment_to_projectRunListFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="projectRunListFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="472" />
-                            <option name="y" value="357" />
+                            <option name="x" value="243" />
+                            <option name="y" value="358" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -98,27 +72,6 @@
                               </value>
                             </entry>
                             <entry key="action_projectRunListFragment_to_userHomePageFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="registerFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="166" />
-                            <option name="y" value="201" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_registerFragment_to_loginFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -196,17 +149,12 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_startAppFragment_to_loginFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                             <entry key="action_startAppFragment_to_projectRunListFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_startAppFragment_to_registerFragment">
+                            <entry key="action_startAppFragment_to_projectRunListFragment2">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -221,8 +169,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="744" />
-                            <option name="y" value="190" />
+                            <option name="x" value="664" />
+                            <option name="y" value="292" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -262,8 +210,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="519" />
-                            <option name="y" value="-87" />
+                            <option name="x" value="429" />
+                            <option name="y" value="-53" />
                           </Point>
                         </option>
                         <option name="myPositions">
