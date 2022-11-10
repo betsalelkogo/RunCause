@@ -1,64 +1,125 @@
 package com.example.runcause;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RunScreenFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.runcause.model.Constants;
+import com.example.runcause.model.adapter.PermissionCallback;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+
 public class RunScreenFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RunScreenFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RunScreenFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RunScreenFragment newInstance(String param1, String param2) {
-        RunScreenFragment fragment = new RunScreenFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    MapView map;
+    TextView averageTime, distance,totalTime;
+    View view;
+    OnMapReadyCallback onMapReadyCallback;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_run_screen, container, false);
+        view= inflater.inflate(R.layout.fragment_run_screen, container, false);
+        map=view.findViewById(R.id.mapView_run_track);
+        averageTime=view.findViewById(R.id.average_run_tv);
+        distance=view.findViewById(R.id.run_distance_tv);
+        totalTime=view.findViewById(R.id.time_run_details_tv);
+
+        InitialGoogleMap(savedInstanceState);
+
+        return view;
+    }
+
+    private void InitialGoogleMap(Bundle savedInstanceState) {
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(Constants.MAPVIEW_BUNDLE_KEY);
+        }
+        onMapReadyCallback = new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap map) {
+                MainActivity.permissionCallback = new PermissionCallback() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onResult(boolean isGranted) {
+                        if (isGranted) {
+
+
+                            //map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(p.getLant(), p.getLang()),7.5F));
+                            map.setMyLocationEnabled(true);
+                        }
+                    }
+                };
+                if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+                }
+                else
+                    MainActivity.permissionCallback.onResult(true);
+            }
+        };
+
+        map.onCreate(mapViewBundle);
+        map.getMapAsync(onMapReadyCallback);
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle mapViewBundle = outState.getBundle(Constants.MAPVIEW_BUNDLE_KEY);
+        if (mapViewBundle == null) {
+            mapViewBundle = new Bundle();
+            outState.putBundle(Constants.MAPVIEW_BUNDLE_KEY, mapViewBundle);
+        }
+        map.onSaveInstanceState(mapViewBundle);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        map.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        map.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        map.onStop();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        map.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        map.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        map.onLowMemory();
     }
 }

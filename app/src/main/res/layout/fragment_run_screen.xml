@@ -19,8 +19,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="33dp"
+        android:layout_height="28dp"
         android:src="@drawable/ic_baseline_timer_24"
         app:layout_constraintBottom_toBottomOf="@+id/run_start_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,8 +31,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="24dp"
-        android:layout_height="18dp"
+        android:layout_width="33dp"
+        android:layout_height="23dp"
         android:src="@drawable/average_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,8 +43,8 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="33dp"
+        android:layout_height="28dp"
         android:src="@drawable/distance_icon"
         app:layout_constraintBottom_toBottomOf="@+id/run_start_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,17 +56,18 @@
     <TextView
         android:id="@+id/textView7"
         android:layout_width="59dp"
-        android:layout_height="24dp"
+        android:layout_height="28dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
         android:text="Distance:"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.132" />
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="99dp"
-        android:layout_height="24dp"
+        android:layout_width="91dp"
+        android:layout_height="27dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="11.5dp"
         android:text="Activity Time:"
@@ -76,7 +77,7 @@
     <TextView
         android:id="@+id/textView10"
         android:layout_width="93dp"
-        android:layout_height="18dp"
+        android:layout_height="24dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="11.5dp"
         android:text="Average Pace:"
@@ -85,27 +86,27 @@
 
     <TextView
         android:id="@+id/average_run_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="82dp"
+        android:layout_height="23dp"
         android:text="7 m for 1 KM"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintHorizontal_bias="0.463"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.014" />
+        app:layout_constraintVertical_bias="0.015" />
 
     <TextView
         android:id="@+id/run_distance_tv"
-        android:layout_width="60dp"
-        android:layout_height="24dp"
+        android:layout_width="62dp"
+        android:layout_height="26dp"
         android:text="12.5 KM"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.321"
+        app:layout_constraintHorizontal_bias="0.355"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time_run_details_tv"
-        app:layout_constraintVertical_bias="0.013" />
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/time_run_details_tv"
@@ -114,20 +115,19 @@
         android:text="15:02 "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintHorizontal_bias="0.43"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/average_run_tv"
-        app:layout_constraintVertical_bias="0.017" />
+        app:layout_constraintVertical_bias="0.022" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView_run_track"
-        android:layout_width="412dp"
-        android:layout_height="578dp"
+        android:layout_width="410dp"
+        android:layout_height="462dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/run_distance_tv"
-        app:layout_constraintVertical_bias="0.267" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.753" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
