@@ -9,12 +9,24 @@
 
     <Button
         android:id="@+id/run_start_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="4dp"
         android:text="start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/run_stop_btn"
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="4dp"
+        android:text="stop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.93"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -110,15 +122,15 @@
 
     <TextView
         android:id="@+id/time_run_details_tv"
-        android:layout_width="58dp"
-        android:layout_height="24dp"
-        android:text="15:02 "
+        android:layout_width="70dp"
+        android:layout_height="23dp"
+        android:text="00:00:00 "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.43"
+        app:layout_constraintHorizontal_bias="0.445"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/average_run_tv"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView_run_track"
