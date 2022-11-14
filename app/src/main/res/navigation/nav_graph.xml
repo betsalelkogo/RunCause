@@ -76,9 +76,6 @@
         <action
             android:id="@+id/action_runScreenFragment_to_endRunFragment"
             app:destination="@id/endRunFragment" />
-        <action
-            android:id="@+id/action_runScreenFragment_to_runMapFragment"
-            app:destination="@id/runMapFragment" />
         <argument
             android:name="user"
             app:argType="com.example.runcause.model.User" />
@@ -92,34 +89,9 @@
         android:label="Activity Details"
         android:gravity="center"
         tools:layout="@layout/fragment_end_run">
-        <action
-            android:id="@+id/action_endRunFragment_to_runMapFragment"
-            app:destination="@id/runMapFragment" />
         <argument
             android:name="user"
             app:argType="com.example.runcause.model.User" />
-        <argument
-            android:name="run"
-            app:argType="com.example.runcause.model.Run" />
-    </fragment>
-    <fragment
-        android:id="@+id/runMapFragment"
-        android:name="com.example.runcause.RunMapFragment"
-        android:label="Run Map Tracker"
-        android:gravity="center"
-        tools:layout="@layout/fragment_run_map">
-        <action
-            android:id="@+id/action_runMapFragment_to_endRunFragment"
-            app:destination="@id/endRunFragment" />
-        <action
-            android:id="@+id/action_runMapFragment_to_runScreenFragment"
-            app:destination="@id/runScreenFragment" />
-        <argument
-            android:name="user"
-            app:argType="com.example.runcause.model.User" />
-        <argument
-            android:name="project"
-            app:argType="com.example.runcause.model.Project" />
         <argument
             android:name="run"
             app:argType="com.example.runcause.model.Run" />

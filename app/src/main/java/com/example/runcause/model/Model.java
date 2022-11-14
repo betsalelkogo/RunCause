@@ -11,7 +11,6 @@ import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.DeleteRunListener;
-import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 
@@ -92,12 +91,12 @@ public class Model {
         });
 
     }
-    public LiveData<List<Project>> getRunByName(String name) {
-        return AppLocalDB.db.projectDao().getProjectByName(name);
+    public LiveData<List<Run>> getRunByName(String name) {
+        return AppLocalDB.db.runDao().getRunByProject(name);
     }
 
-    public LiveData<List<Project>> getProjectByName(String projectName) {
-        return AppLocalDB.db.projectDao().getProjectByName(projectName);
+    public LiveData<List<Project>> getProjectByName(String project_id) {
+        return AppLocalDB.db.projectDao().getProjectById(project_id);
     }
     public void DeleteRun(Run run, DeleteRunListener listener){
         run.setDeleted(true);

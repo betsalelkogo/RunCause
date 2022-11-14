@@ -32,6 +32,7 @@ import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
 import com.example.runcause.model.adapter.MyAdapter;
+import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 
 
@@ -151,12 +152,22 @@ public class ProjectRunListFragment extends Fragment {
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 project = viewModel.getData().getValue().get(position);
-                if(!project.getName().equalsIgnoreCase(user.getName()))
-                {
-                    ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
-                    Navigation.findNavController(v).navigate(action);
-                    dialog.dismiss();
+                boolean flagProject=false;
+                for(int i=0;i<user.getMyList().size();i++){
+                    if(project.getId_key().equals((user.getMyList().get(i)))){
+                        flagProject=true;
+                    }
                 }
+                if(!flagProject)
+                {
+                    user.getMyList().add(project.getId_key());
+                    Model.instance.addUser(user,new AddUserListener(){
+                        @Override
+                        public void onComplete() {
+                            ProjectRunListFragmentDirections.ActionProjectRunListFragmentToUserHomePageFragment action = ProjectRunListFragmentDirections.actionProjectRunListFragmentToUserHomePageFragment(user,project);
+                            Navigation.findNavController(v).navigate(action);
+                            dialog.dismiss();
+                    }});}
                 else{
                     popup_text_v.setText("You already add this!");
                     progressBar.setVisibility(View.GONE);

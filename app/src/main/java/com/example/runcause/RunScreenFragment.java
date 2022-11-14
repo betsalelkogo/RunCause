@@ -41,7 +41,7 @@ public class RunScreenFragment extends Fragment {
     TextView averageTime, distance,totalTime;
     View view;
     OnMapReadyCallback onMapReadyCallback;
-    Button startRun,stopRun;
+    Button startRun,stopRun,pauseRun;
     Timer timer;
     TimerTask timerTask;
     Project p;
@@ -61,6 +61,9 @@ public class RunScreenFragment extends Fragment {
         totalTime=view.findViewById(R.id.time_run_details_tv);
         startRun=view.findViewById(R.id.run_start_btn);
         stopRun=view.findViewById(R.id.run_stop_btn);
+        pauseRun=view.findViewById(R.id.run_pause_btn);
+        pauseRun.setVisibility(View.GONE);
+        stopRun.setVisibility(View.GONE);
         timer=new Timer();
         startRun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +76,16 @@ public class RunScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 resetTapped();
+            }
+        });
+        pauseRun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRun.setVisibility(View.GONE);
+                pauseRun.setVisibility(View.VISIBLE);
+                pauseRun.setText("Resume");
+                stopRun.setVisibility(View.VISIBLE);
+                timer.cancel();
             }
         });
         InitialGoogleMap(savedInstanceState);
@@ -162,14 +175,14 @@ public class RunScreenFragment extends Fragment {
     private void startStopTapped(){
         if(timerStarted==false){
             timerStarted=true;
-            startRun.setText("pause");
-            startRun.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+            startRun.setVisibility(View.GONE);
+            pauseRun.setVisibility(View.VISIBLE);
+            stopRun.setVisibility(View.VISIBLE);
             StartTimer();
         }else
         {
             timerStarted=false;
-            startRun.setText("Start");
-            startRun.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+            startRun.setVisibility(View.VISIBLE);
             timerTask.cancel();
         }
     }
@@ -179,9 +192,8 @@ public class RunScreenFragment extends Fragment {
 
             @Override
             public void run() {
-                    time++;
-                    totalTime.setText(getTimerText());
-
+                time++;
+                totalTime.setText(getTimerText());
                 }
             };
         timer.scheduleAtFixedRate(timerTask,0,1000);
@@ -221,7 +233,6 @@ public class RunScreenFragment extends Fragment {
                     r.setDistance(distance.toString());
                     r.setTime(time.toString());
                     r.setProjectId(p.getId_key());
-                    setButtonUI("start", R.color.green);
                     time = 0.0;
                     timerStarted = false;
                     totalTime.setText(formatTime(0,0,0));
@@ -242,10 +253,5 @@ public class RunScreenFragment extends Fragment {
 
         resetAlert.show();
 
-    }
-    private void setButtonUI(String start, int color)
-    {
-        startRun.setText(start);
-        startRun.setTextColor(ContextCompat.getColor(getContext(), color));
     }
 }

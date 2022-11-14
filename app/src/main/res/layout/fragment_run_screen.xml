@@ -9,25 +9,35 @@
 
     <Button
         android:id="@+id/run_start_btn"
-        android:layout_width="180dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="104dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
         android:text="start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/run_stop_btn"
-        android:layout_width="180dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="105dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="8dp"
         android:text="stop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
+        app:layout_constraintHorizontal_bias="0.947"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/run_pause_btn"
+        android:layout_width="100dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="8dp"
+        android:text="pause"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/run_stop_btn"
+        app:layout_constraintStart_toEndOf="@+id/run_start_btn" />
 
     <ImageView
         android:id="@+id/imageView"

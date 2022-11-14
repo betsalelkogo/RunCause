@@ -63,6 +63,7 @@ public class UserHomePageFragment extends Fragment {
     View view;
     TextView userName, email;
     User user;
+    List<Project> myProject=new ArrayList<>();
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToUserRunListFragment HomeToRunList;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToRunScreenFragment UserToNewRun;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentSelf UserToEditUser;
@@ -77,6 +78,7 @@ public class UserHomePageFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModelProject = new ViewModelProvider(this).get(UserProjectListFragmentViewModel.class);
+
     }
 
     @Override
@@ -85,7 +87,7 @@ public class UserHomePageFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_user_home_page, container, false);
         user=UserHomePageFragmentArgs.fromBundle(getArguments()).getUser();
-        viewModelProject.setData(user);
+
         project=UserHomePageFragmentArgs.fromBundle(getArguments()).getProject();
         userName= view.findViewById(R.id.user_page_name_tv);
         email= view.findViewById(R.id.user_page_email_tv);
@@ -108,6 +110,7 @@ public class UserHomePageFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
         list.addItemDecoration(dividerItemDecoration);
         setHasOptionsMenu(true);
+        viewModelProject.setData(user);
         viewModelProject.getData().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
             @Override
             public void onChanged(List<Project> posts) {

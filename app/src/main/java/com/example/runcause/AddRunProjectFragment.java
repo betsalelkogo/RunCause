@@ -70,7 +70,12 @@ public class AddRunProjectFragment extends Fragment {
         p.setTotalDistance(p_target.getText().toString());
         p.setPublic(checkBox_Public.isChecked());
         p.setName(user.getName());
-        Model.instance.addProject(p, () -> Navigation.findNavController(sendBtn).navigateUp());
+        user.getMyList().add(p.getId_key());
+
+        Model.instance.addProject(p, () -> {
+        Model.instance.addUser(user,()->Navigation.findNavController(sendBtn).navigateUp());
+
+        });
 
     }
     private boolean validate() {

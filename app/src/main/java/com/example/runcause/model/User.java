@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -21,7 +23,7 @@ public class User implements Parcelable {
     private String weight;
     private String height;
     protected String bYear;
-
+    private List<String> myList=new ArrayList<>();
 
     public User(String name,String password,String email,String bYear,String weight,String height){
         this.name=name;
@@ -33,14 +35,16 @@ public class User implements Parcelable {
         this.imageUrl=null;
     }
 
+
     protected User(Parcel in) {
         name = in.readString();
         password = in.readString();
         email = in.readString();
         imageUrl = in.readString();
-        bYear = in.readString();
         weight = in.readString();
         height = in.readString();
+        bYear = in.readString();
+        myList = in.createStringArrayList();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -116,6 +120,7 @@ public class User implements Parcelable {
         json.put("height", getHeight());
         json.put("bYear", getbYear());
         json.put("weight", getWeight());
+        json.put("myListProject", getMyList());
         return json;
     }
 
@@ -130,7 +135,9 @@ public class User implements Parcelable {
         String height = (String)json.get("height");
         String bYear = (String)json.get("bYear");
         String weight = (String)json.get("weight");
+        List<String> myListProject = (List<String>) json.get("myListProject");
         User u = new User(name,password,email,bYear,weight,height);
+        u.setMyList(myListProject);
         u.setImageUrl(imageUrl);
         return u;
     }
@@ -151,5 +158,14 @@ public class User implements Parcelable {
         parcel.writeString(bYear);
         parcel.writeString(weight);
         parcel.writeString(height);
+        parcel.writeList(myList);
+    }
+
+    public List<String> getMyList() {
+        return myList;
+    }
+
+    public void setMyList(List<String> myList) {
+        this.myList = myList;
     }
 }
