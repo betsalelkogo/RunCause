@@ -41,7 +41,7 @@ public class RunScreenFragment extends Fragment {
     TextView averageTime, distance,totalTime;
     View view;
     OnMapReadyCallback onMapReadyCallback;
-    Button startRun,stopRun,pauseRun;
+    Button startRun;//,stopRun,pauseRun;
     Timer timer;
     TimerTask timerTask;
     Project p;
@@ -52,18 +52,18 @@ public class RunScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view= inflater.inflate(R.layout.fragment_run_screen, container, false);
-        map=view.findViewById(R.id.mapView_run_track);
+        map=view.findViewById(R.id.mapView);
         p=RunScreenFragmentArgs.fromBundle(getArguments()).getProject();
         user=RunScreenFragmentArgs.fromBundle(getArguments()).getUser();
 
-        averageTime=view.findViewById(R.id.average_run_tv);
-        distance=view.findViewById(R.id.run_distance_tv);
-        totalTime=view.findViewById(R.id.time_run_details_tv);
-        startRun=view.findViewById(R.id.run_start_btn);
-        stopRun=view.findViewById(R.id.run_stop_btn);
-        pauseRun=view.findViewById(R.id.run_pause_btn);
-        pauseRun.setVisibility(View.GONE);
-        stopRun.setVisibility(View.GONE);
+        averageTime=view.findViewById(R.id.tvSpeed);
+        distance=view.findViewById(R.id.tvDistance);
+        totalTime=view.findViewById(R.id.tvTime);
+        startRun=view.findViewById(R.id.btnStartService);
+        //stopRun=view.findViewById(R.id.run_stop_btn);
+        //pauseRun=view.findViewById(R.id.run_pause_btn);
+        //pauseRun.setVisibility(View.GONE);
+        //stopRun.setVisibility(View.GONE);
         timer=new Timer();
         startRun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,22 +72,22 @@ public class RunScreenFragment extends Fragment {
                 StartTimer();
             }
         });
-        stopRun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetTapped();
-            }
-        });
-        pauseRun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRun.setVisibility(View.GONE);
-                pauseRun.setVisibility(View.VISIBLE);
-                pauseRun.setText("Resume");
-                stopRun.setVisibility(View.VISIBLE);
-                timer.cancel();
-            }
-        });
+//        stopRun.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetTapped();
+//            }
+//        });
+//        pauseRun.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startRun.setVisibility(View.GONE);
+//                pauseRun.setVisibility(View.VISIBLE);
+//                pauseRun.setText("Resume");
+//                stopRun.setVisibility(View.VISIBLE);
+//                timer.cancel();
+//            }
+//        });
         InitialGoogleMap(savedInstanceState);
 
         return view;
@@ -176,8 +176,8 @@ public class RunScreenFragment extends Fragment {
         if(timerStarted==false){
             timerStarted=true;
             startRun.setVisibility(View.GONE);
-            pauseRun.setVisibility(View.VISIBLE);
-            stopRun.setVisibility(View.VISIBLE);
+            //pauseRun.setVisibility(View.VISIBLE);
+            //stopRun.setVisibility(View.VISIBLE);
             StartTimer();
         }else
         {
