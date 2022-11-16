@@ -41,7 +41,7 @@ public class RunScreenFragment extends Fragment {
     TextView averageTime, distance,totalTime;
     View view;
     OnMapReadyCallback onMapReadyCallback;
-    Button startRun;//,stopRun,pauseRun;
+    Button startRun,saveRun;//,pauseRun;
     Timer timer;
     TimerTask timerTask;
     Project p;
@@ -60,7 +60,7 @@ public class RunScreenFragment extends Fragment {
         distance=view.findViewById(R.id.tvDistance);
         totalTime=view.findViewById(R.id.tvTime);
         startRun=view.findViewById(R.id.btnStartService);
-        //stopRun=view.findViewById(R.id.run_stop_btn);
+        saveRun=view.findViewById(R.id.btnSaveJourney);
         //pauseRun=view.findViewById(R.id.run_pause_btn);
         //pauseRun.setVisibility(View.GONE);
         //stopRun.setVisibility(View.GONE);
@@ -68,26 +68,28 @@ public class RunScreenFragment extends Fragment {
         startRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveRun.setVisibility(View.VISIBLE);
                 startStopTapped();
                 StartTimer();
             }
         });
-//        stopRun.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resetTapped();
-//            }
-//        });
-//        pauseRun.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startRun.setVisibility(View.GONE);
-//                pauseRun.setVisibility(View.VISIBLE);
-//                pauseRun.setText("Resume");
-//                stopRun.setVisibility(View.VISIBLE);
-//                timer.cancel();
-//            }
-//        });
+        saveRun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timerTask.cancel();
+                Run r=new Run();
+                r.setDate(new Date().toString());
+                r.setDistance(distance.toString());
+                r.setTime(time.toString());
+                r.setProjectId(p.getId_key());
+                time = 0.0;
+                timerStarted = false;
+                totalTime.setText(formatTime(0,0,0));
+                RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action=RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user,r);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
+//
         InitialGoogleMap(savedInstanceState);
 
         return view;
@@ -212,46 +214,5 @@ public class RunScreenFragment extends Fragment {
     private String formatTime(int seconds, int minutes, int hours)
     {
         return String.format("%02d",hours) + " : " + String.format("%02d",minutes) + " : " + String.format("%02d",seconds);
-    }
-
-
-    public void resetTapped()
-    {
-        AlertDialog.Builder resetAlert = new AlertDialog.Builder(getContext());
-        resetAlert.setTitle("End Activity");
-        resetAlert.setMessage("Are you sure you want to Stop your activity?");
-        resetAlert.setPositiveButton("Stop", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                if(timerTask != null)
-                {
-                    timerTask.cancel();
-                    Run r=new Run();
-                    r.setDate(new Date().toString());
-                    r.setDistance(distance.toString());
-                    r.setTime(time.toString());
-                    r.setProjectId(p.getId_key());
-                    time = 0.0;
-                    timerStarted = false;
-                    totalTime.setText(formatTime(0,0,0));
-                    RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action=RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user,r);
-                    Navigation.findNavController(view).navigate(action);
-                }
-            }
-        });
-
-        resetAlert.setNeutralButton("Cancel", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                //do nothing
-            }
-        });
-
-        resetAlert.show();
-
     }
 }
