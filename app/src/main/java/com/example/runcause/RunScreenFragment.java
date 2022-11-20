@@ -2,15 +2,13 @@ package com.example.runcause;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -24,12 +22,10 @@ import com.example.runcause.model.Project;
 import com.example.runcause.model.Run;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.PermissionCallback;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 
 import java.util.Date;
 import java.util.Timer;
@@ -46,8 +42,9 @@ public class RunScreenFragment extends Fragment {
     TimerTask timerTask;
     Project p;
     User user;
-    Double time =0.0;
-    boolean timerStarted=false;
+    Double time =0.0,distanceRun =0.0,avgSpeed=0.0;
+    boolean isTracking=false;
+    MutableLiveData<Polyline> pathPoints = new MutableLiveData<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +66,6 @@ public class RunScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveRun.setVisibility(View.VISIBLE);
-                startStopTapped();
                 StartTimer();
             }
         });
@@ -83,7 +79,7 @@ public class RunScreenFragment extends Fragment {
                 r.setTime(time.toString());
                 r.setProjectId(p.getId_key());
                 time = 0.0;
-                timerStarted = false;
+                isTracking = false;
                 totalTime.setText(formatTime(0,0,0));
                 RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action=RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user,r);
                 Navigation.findNavController(view).navigate(action);
@@ -174,20 +170,6 @@ public class RunScreenFragment extends Fragment {
         super.onLowMemory();
         map.onLowMemory();
     }
-    private void startStopTapped(){
-        if(timerStarted==false){
-            timerStarted=true;
-            startRun.setVisibility(View.GONE);
-            //pauseRun.setVisibility(View.VISIBLE);
-            //stopRun.setVisibility(View.VISIBLE);
-            StartTimer();
-        }else
-        {
-            timerStarted=false;
-            startRun.setVisibility(View.VISIBLE);
-            timerTask.cancel();
-        }
-    }
 
     private void StartTimer() {
         timerTask=new TimerTask() {
@@ -215,4 +197,5 @@ public class RunScreenFragment extends Fragment {
     {
         return String.format("%02d",hours) + " : " + String.format("%02d",minutes) + " : " + String.format("%02d",seconds);
     }
+
 }

@@ -87,7 +87,6 @@ public class UserHomePageFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_user_home_page, container, false);
         user=UserHomePageFragmentArgs.fromBundle(getArguments()).getUser();
-
         project=UserHomePageFragmentArgs.fromBundle(getArguments()).getProject();
         userName= view.findViewById(R.id.user_page_name_tv);
         email= view.findViewById(R.id.user_page_email_tv);
@@ -95,7 +94,8 @@ public class UserHomePageFragment extends Fragment {
         swipeRefresh = view.findViewById(R.id.user_home_page_swip_refresh);
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(true);
-            Model.instance.reloadProjectList();
+            Model.instance.reloadProjectList(user);
+            //updateViewModel();
             adapter.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
         });
@@ -110,13 +110,12 @@ public class UserHomePageFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
         list.addItemDecoration(dividerItemDecoration);
         setHasOptionsMenu(true);
-        viewModelProject.setData(user);
         viewModelProject.getData().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
             @Override
             public void onChanged(List<Project> posts) {
-            adapter.setFragment(UserHomePageFragment.this);
-            adapter.setData(viewModelProject.getData().getValue());
-            adapter.notifyDataSetChanged();}
+                adapter.setFragment(UserHomePageFragment.this);
+                adapter.setData(viewModelProject.getData().getValue());
+                adapter.notifyDataSetChanged();}
         });
         progressBar.setVisibility(View.GONE);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -138,9 +137,21 @@ public class UserHomePageFragment extends Fragment {
             }
         });
         updateUserPage();
+        //updateViewModel();
         setHasOptionsMenu(true);
         return view;
     }
+
+//    private void updateViewModel() {
+//        for(int i=0;i<user.getMyList().size();i++){
+//            for(int j=0;j<viewModelProject.getData().getValue().size();j++){
+//                if(!user.getMyList().get(i).equalsIgnoreCase(viewModelProject.getData().getValue().get(j).getId_key())){
+//                    viewModelProject.getData().getValue().remove(j);
+//                }
+//            }
+//        }
+//    }
+
     private void updateUserPage() {
         userName.setText(user.getName());
         email.setText(user.getEmail());

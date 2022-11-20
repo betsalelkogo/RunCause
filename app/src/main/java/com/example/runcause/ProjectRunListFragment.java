@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
 import com.example.runcause.model.LoadingState;
@@ -31,7 +30,6 @@ import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
-import com.example.runcause.model.adapter.MyAdapter;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 
@@ -68,7 +66,7 @@ public class ProjectRunListFragment extends Fragment {
         addProject= view.findViewById(R.id.add_project_btn);
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(true);
-            Model.instance.reloadProjectList();
+            Model.instance.reloadAllProjectList();
             adapter.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
         });

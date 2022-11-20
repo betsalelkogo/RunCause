@@ -12,15 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserProjectListFragmentViewModel extends ViewModel {
-    User user;
-    LiveData<List<Project>> data;
-    //List<Project> temp=new ArrayList<>();
+    LiveData<List<Project>> data = Model.instance.getProject();
     public LiveData<List<Project>> getData() {
         return data;
-    }
-    public void setData(User user)
-    {
-        this.user=user;
-        this.data= Model.instance.getProjectByName(user.getMyList().get(0));
     }
 }
