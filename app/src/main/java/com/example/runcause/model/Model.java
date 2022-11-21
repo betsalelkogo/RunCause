@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 
 import com.example.runcause.MyApplication;
+import com.example.runcause.model.intefaces.AddLocationListener;
 import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
@@ -14,6 +15,7 @@ import com.example.runcause.model.intefaces.DeleteRunListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
@@ -89,7 +91,11 @@ public class Model {
             listener.onComplete();
         });
     }
-
+    public void addLocation(ArrayList<Location> arrLocations, String email, AddLocationListener listener){
+        modelFirebase.saveRun(arrLocations,email,()->{;
+            listener.onComplete();
+        });
+    }
     public void addUser(User user, AddUserListener listener){
         modelFirebase.addUser(user, () ->{
             listener.onComplete();

@@ -29,21 +29,17 @@ public class Run implements Parcelable {
     private String date;
     private String time;
     private String calories;
-    private double startLang;
-    private double startLant;
-    //private double finishLang;
-    //private double finishLant;
+    private String user;
     private boolean isDeleted;
     private Long lastUpdated = new Long(0);
 
-    public Run(String distance,String projectId,String date, String time,String calories,double startLang,double startLant,boolean isDeleted){
+    public Run(String distance,String projectId,String date, String time,String calories,String user,boolean isDeleted){
         this.calories=calories;
         this.distance=distance;
         this.date=date;
         this.projectId=projectId;
         this.time=time;
-        this.startLang=startLang;
-        this.startLant=startLant;
+        this.user=user;
         this.isDeleted=isDeleted;
     }
     @Ignore
@@ -57,9 +53,8 @@ public class Run implements Parcelable {
         date = in.readString();
         time = in.readString();
         calories = in.readString();
-        startLang = in.readDouble();
-        startLant = in.readDouble();
         isDeleted = in.readByte() != 0;
+        user=in.readString();
         if (in.readByte() == 0) {
             lastUpdated = null;
         } else {
@@ -86,8 +81,7 @@ public class Run implements Parcelable {
         json.put("projectId", getProjectId());
         json.put("time", getTime());
         json.put("date", getDate());
-        json.put("startLang", getStartLang());
-        json.put("startLant", getStartLant());
+        json.put("user", getUser());
         json.put("isDeleted", isDeleted());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
@@ -103,10 +97,9 @@ public class Run implements Parcelable {
         String calories = (String)json.get("calories");
         String time = (String)json.get("time");
         String date = (String)json.get("date");
-        double startLang = (double)json.get("startLang");
-        double startLant = (double)json.get("startLant");
+        String user = (String)json.get("user");
         boolean isDeleted = (boolean)json.get("isDeleted");
-        Run r = new Run(distance,projectId,date,time,calories,startLang,startLant,isDeleted);
+        Run r = new Run(distance,projectId,date,time,calories,user,isDeleted);
         r.setDeleted(isDeleted);
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
         r.setLastUpdated(new Long(ts.getSeconds()));
@@ -177,21 +170,6 @@ public class Run implements Parcelable {
         this.calories = calories;
     }
 
-    public double getStartLang() {
-        return startLang;
-    }
-
-    public void setStartLang(double startLang) {
-        this.startLang = startLang;
-    }
-
-    public double getStartLant() {
-        return startLant;
-    }
-
-    public void setStartLant(double startLant) {
-        this.startLant = startLant;
-    }
 
     public Long getLastUpdated() {
         return lastUpdated;
@@ -218,8 +196,7 @@ public class Run implements Parcelable {
         parcel.writeString(date);
         parcel.writeString(time);
         parcel.writeString(calories);
-        parcel.writeDouble(startLang);
-        parcel.writeDouble(startLant);
+        parcel.writeString(user);
         parcel.writeByte((byte) (isDeleted ? 1 : 0));
         if (lastUpdated == null) {
             parcel.writeByte((byte) 0);
@@ -227,5 +204,13 @@ public class Run implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeLong(lastUpdated);
         }
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

@@ -95,7 +95,6 @@ public class UserHomePageFragment extends Fragment {
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(true);
             Model.instance.reloadProjectList(user);
-            //updateViewModel();
             adapter.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
         });
@@ -137,20 +136,9 @@ public class UserHomePageFragment extends Fragment {
             }
         });
         updateUserPage();
-        //updateViewModel();
         setHasOptionsMenu(true);
         return view;
     }
-
-//    private void updateViewModel() {
-//        for(int i=0;i<user.getMyList().size();i++){
-//            for(int j=0;j<viewModelProject.getData().getValue().size();j++){
-//                if(!user.getMyList().get(i).equalsIgnoreCase(viewModelProject.getData().getValue().get(j).getId_key())){
-//                    viewModelProject.getData().getValue().remove(j);
-//                }
-//            }
-//        }
-//    }
 
     private void updateUserPage() {
         userName.setText(user.getName());

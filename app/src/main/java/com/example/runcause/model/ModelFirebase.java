@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.example.runcause.model.intefaces.AddLocationListener;
 import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
@@ -26,9 +27,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class ModelFirebase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -91,25 +97,14 @@ public class ModelFirebase {
 
     }
 
-    public void addRun(@NonNull Run run, AddRunListener listener) {
-        if(run.getId_key()==null){
-            db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
+    public void addRun(@NonNull Run run,AddRunListener listener) {
+        db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
                 .document().set(run.toJson())
                 .addOnSuccessListener((successListener)-> {
                     listener.onComplete();
                 })
                 .addOnFailureListener((e)-> {
                 });
-        }
-        else{
-            db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
-                    .document(run.getId_key()).set(run.toJson())
-                    .addOnSuccessListener((successListener)-> {
-                        listener.onComplete();
-                    })
-                    .addOnFailureListener((e)-> {
-                    });
-        }
     }
 
     public void getUserByEmail(String userEmail, GetUserByEmailListener listener) {
@@ -212,5 +207,19 @@ public class ModelFirebase {
             }
         });
 
+    }
+
+    public void saveRun(ArrayList<Location> arrLocations,String email,AddLocationListener listener){
+        Map<String,Object>json =new HashMap<>();
+        for(int i=0;i<arrLocations.size();i++){
+            json.put(""+i,arrLocations.get(i).toJson());
+        }
+        db.collection(Constants.MODEL_FIRE_BASE_USER_COLLECTION).getFirestore().collection("users").document(email)
+                .collection("location").document()
+                .set(json)
+                .addOnSuccessListener((successListener)-> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener((e)-> { });
     }
 }
