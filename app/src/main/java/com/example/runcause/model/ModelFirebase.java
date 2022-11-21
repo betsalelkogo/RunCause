@@ -11,6 +11,7 @@ import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.GetAllProjectListener;
 import com.example.runcause.model.intefaces.GetAllRunsListener;
+import com.example.runcause.model.intefaces.GetLocationListener;
 import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
@@ -71,22 +72,23 @@ public class ModelFirebase {
         });
     }
     public void getAllRuns(Long since, GetAllRunsListener listener) {
-        db.collection("runs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<Run> postList = new LinkedList<Run>();
+                LinkedList<Run> runList = new LinkedList<Run>();
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         Run r = Run.fromJson(doc.getData());
+
                         r.setId_key(doc.getId());
                         if (r != null) {
-                            postList.add(r);
+                            runList.add(r);
                         }
                     }
                 }else{
 
                 }
-                listener.onComplete(postList);
+                listener.onComplete(runList);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -214,12 +216,40 @@ public class ModelFirebase {
         for(int i=0;i<arrLocations.size();i++){
             json.put(""+i,arrLocations.get(i).toJson());
         }
-        db.collection(Constants.MODEL_FIRE_BASE_USER_COLLECTION).getFirestore().collection("users").document(email)
+        db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).getFirestore().collection("users").document(email)
                 .collection("location").document()
                 .set(json)
                 .addOnSuccessListener((successListener)-> {
                     listener.onComplete();
                 })
                 .addOnFailureListener((e)-> { });
+    }
+
+    public void getLocationByRunId(String id, GetLocationListener listener) {
+        db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).document(id).collection("location").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<Location> arrLocation = new ArrayList<>();
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        Location l = Location.fromJson(doc.getData());
+
+                        l.setId_key(doc.getId());
+                        if (l != null) {
+                            arrLocation.add(l);
+                        }
+                    }
+                }else{
+
+                }
+                listener.onComplete(arrLocation);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onComplete(null);
+            }
+        });
+
     }
 }

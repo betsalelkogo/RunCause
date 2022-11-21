@@ -8,6 +8,7 @@ public class Location {
     private double lat;
     private double lng;
     private float speed;
+    private String id_key;
 
     public Location() {
     }
@@ -58,5 +59,9 @@ public class Location {
 
     public void setLat(double lat) {
         this.lat = lat;
+    }
+
+    public void setId_key(String id) {
+        this.id_key=id;
     }
 }

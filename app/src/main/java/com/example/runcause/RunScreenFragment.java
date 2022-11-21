@@ -63,8 +63,8 @@ public class RunScreenFragment extends Fragment {
     User user;
     Double time = 0.0, distanceRun = 0.0, avgSpeed = 0.0;
     boolean isTracking = false;
-    MutableLiveData<Polyline> pathPoints = new MutableLiveData<>();
     static Handler handler;
+
 
 
     @Override
@@ -74,18 +74,13 @@ public class RunScreenFragment extends Fragment {
         map = view.findViewById(R.id.mapView);
         p = RunScreenFragmentArgs.fromBundle(getArguments()).getProject();
         user = RunScreenFragmentArgs.fromBundle(getArguments()).getUser();
-
-
         averageTime = view.findViewById(R.id.tvSpeed);
         distance = view.findViewById(R.id.tvDistance);
         totalTime = view.findViewById(R.id.tvTime);
-        startRun = view.findViewById(R.id.btnStartService);
+        startRun = view.findViewById(R.id.btn_close_run_detailes);
         saveRun = view.findViewById(R.id.btnSaveJourney);
         btnDraw = view.findViewById(R.id.btnDraw);
-
-        //pauseRun=view.findViewById(R.id.run_pause_btn);
-        //pauseRun.setVisibility(View.GONE);
-        //stopRun.setVisibility(View.GONE);
+        //todo: add the pause option for the timer
 
         btnDraw.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +125,6 @@ public class RunScreenFragment extends Fragment {
                 });
             }
         });
-//
         InitialGoogleMap(savedInstanceState);
         setLocationBroadcast();
 

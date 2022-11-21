@@ -12,6 +12,7 @@ import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.DeleteRunListener;
+import com.example.runcause.model.intefaces.GetLocationListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 
@@ -122,7 +123,9 @@ public class Model {
     public void uploadImage(Bitmap bitmap, String name, final UploadImageListener listener){
         modelFirebase.uploadImage(bitmap,name,listener);
     }
-
+    public void getLocationById(String id, GetLocationListener listener) {
+        modelFirebase.getLocationByRunId(id,listener);
+    }
     public void reloadProjectList(User u) {
         loadingState.setValue(LoadingState.loading);
         //1. get local last update
