@@ -48,7 +48,7 @@ public class EndRunFragment extends Fragment {
     User user;
     OnMapReadyCallback onMapReadyCallback;
     static Handler handler;
-    ArrayList<Location> locations;
+    ArrayList<Location> locations=new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,15 +61,31 @@ public class EndRunFragment extends Fragment {
         distance = view.findViewById(R.id.tvDistance);
         totalTime = view.findViewById(R.id.tvTime);
         map = view.findViewById(R.id.mapView);
-        Model.instance.getLocationById(r.getId_key(), new GetLocationListener() {
-            @Override
-            public void onComplete(ArrayList<Location> arrLocation) {
-                locations=arrLocation;
-            }
-        });
+//        Model.instance.getLocationById(r.getId_key(), new GetLocationListener() {
+//            @Override
+//            public void onComplete(ArrayList<Location> arrLocation) {
+//                locations=arrLocation;
+//            }
+//        });
         InitialGoogleMap(savedInstanceState);
+        updateDetails();
         drawRunOnMap((ArrayList<Location>) locations);
         return view;
+    }
+
+    private void updateDetails() {
+        if (handler == null){
+            handler = new Handler(Looper.getMainLooper());
+        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                double speed= Float.parseFloat(r.getDistance())/Float.parseFloat(r.getTime());
+                totalTime.setText(getTimerText());
+                averageTime.setText((int) speed);
+                distance.setText(r.getDistance());
+            }
+        });
     }
 
     private void InitialGoogleMap(Bundle savedInstanceState) {

@@ -264,6 +264,8 @@ public class RunScreenFragment extends Fragment {
                     public void run() {
                         time++;
                         totalTime.setText(getTimerText());
+                        averageTime.setText("45");
+                        distance.setText("78");
                     }
                 });
 
