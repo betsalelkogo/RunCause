@@ -64,6 +64,7 @@ public class RunScreenFragment extends Fragment {
     Double time = 0.0, distanceRun = 0.0, avgSpeed = 0.0;
     boolean isTracking = false;
     static Handler handler;
+    ArrayList<Location> locations;
 
 
 
@@ -113,6 +114,7 @@ public class RunScreenFragment extends Fragment {
                 r.setTime(time.toString());
                 r.setProjectId(p.getId_key());
                 r.setUser(user.getEmail());
+                r.setLocations(locations);
                 time = 0.0;
                 isTracking = false;
                 totalTime.setText(formatTime(0, 0, 0));
@@ -195,7 +197,7 @@ public class RunScreenFragment extends Fragment {
             public void onReceive(Context context, Intent intent) {
                 if (intent.hasExtra("Locations")){
                     String data = intent.getStringExtra("Locations");
-                    ArrayList<Location> locations = new ArrayList<>(Arrays.asList(new Gson().fromJson(data, Location[].class)));
+                    locations= new ArrayList<>(Arrays.asList(new Gson().fromJson(data, Location[].class)));
                     drawLineOnMap(locations);
                 }
             }

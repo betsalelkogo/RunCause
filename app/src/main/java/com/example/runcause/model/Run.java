@@ -14,6 +14,7 @@ import com.example.runcause.MyApplication;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class Run implements Parcelable {
     private String user;
     private boolean isDeleted;
     private Long lastUpdated = new Long(0);
+    private ArrayList<Location> locations;
+
 
     public Run(String distance,String projectId,String date, String time,String calories,String user,boolean isDeleted){
         this.calories=calories;
@@ -46,6 +49,7 @@ public class Run implements Parcelable {
     public Run() {
     }
 
+
     protected Run(Parcel in) {
         id_key = in.readString();
         distance = in.readString();
@@ -53,8 +57,8 @@ public class Run implements Parcelable {
         date = in.readString();
         time = in.readString();
         calories = in.readString();
+        user = in.readString();
         isDeleted = in.readByte() != 0;
-        user=in.readString();
         if (in.readByte() == 0) {
             lastUpdated = null;
         } else {
@@ -83,7 +87,9 @@ public class Run implements Parcelable {
         json.put("date", getDate());
         json.put("user", getUser());
         json.put("isDeleted", isDeleted());
+        json.put("location", getLocations());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
+
         return json;
     }
 
@@ -99,8 +105,10 @@ public class Run implements Parcelable {
         String date = (String)json.get("date");
         String user = (String)json.get("user");
         boolean isDeleted = (boolean)json.get("isDeleted");
+        ArrayList<Location> locations= (ArrayList<Location>) json.get("location");
         Run r = new Run(distance,projectId,date,time,calories,user,isDeleted);
         r.setDeleted(isDeleted);
+        r.setLocations(locations);
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
         r.setLastUpdated(new Long(ts.getSeconds()));
         return r;
@@ -189,22 +197,24 @@ public class Run implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id_key);
-        parcel.writeString(distance);
-        parcel.writeString(projectId);
-        parcel.writeString(date);
-        parcel.writeString(time);
-        parcel.writeString(calories);
-        parcel.writeString(user);
-        parcel.writeByte((byte) (isDeleted ? 1 : 0));
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(id_key);
+        dest.writeString(distance);
+        dest.writeString(projectId);
+        dest.writeString(date);
+        dest.writeString(time);
+        dest.writeString(calories);
+        dest.writeString(user);
+        dest.writeByte((byte) (isDeleted ? 1 : 0));
         if (lastUpdated == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(lastUpdated);
+            dest.writeByte((byte) 1);
+            dest.writeLong(lastUpdated);
         }
     }
+
 
     public String getUser() {
         return user;
@@ -212,5 +222,13 @@ public class Run implements Parcelable {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
     }
 }
