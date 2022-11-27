@@ -52,8 +52,6 @@ public class EndRunFragment extends Fragment {
     Project p;
     OnMapReadyCallback onMapReadyCallback;
     static Handler handler;
-    ArrayList<Location> locations;
-    RunLocationViewModel viewModel= new RunLocationViewModel();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,13 +60,17 @@ public class EndRunFragment extends Fragment {
         view= inflater.inflate(R.layout.fragment_end_run, container, false);
         user=EndRunFragmentArgs.fromBundle(getArguments()).getUser();
         r=EndRunFragmentArgs.fromBundle(getArguments()).getRun();
-
+        Model.instance.getLocations(r, new GetLocationListener() {
+            @Override
+            public void onComplete(ArrayList<Location> arrLocation) {
+                r.setLocations(arrLocation);
+            }
+        });
         closeBtn=view.findViewById(R.id.btn_close_run_detailes);
         averageTime = view.findViewById(R.id.tvSpeed);
         distance = view.findViewById(R.id.tvDistance);
         totalTime = view.findViewById(R.id.tvTime);
         map = view.findViewById(R.id.mapView);
-        locations=viewModel.getData();
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +86,7 @@ public class EndRunFragment extends Fragment {
                 p=project;
             }
         });
-        drawRunOnMap((ArrayList<Location>) locations);
+        drawRunOnMap(r.getLocations());
         return view;
     }
 

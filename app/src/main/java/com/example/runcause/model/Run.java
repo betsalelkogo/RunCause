@@ -33,7 +33,7 @@ public class Run implements Parcelable {
     private String user;
     private boolean isDeleted;
     private Long lastUpdated = new Long(0);
-
+    private ArrayList<Location> locations;
 
     public Run(String distance,String projectId,String date, String time,String calories,String user,boolean isDeleted){
         this.calories=calories;
@@ -220,4 +220,11 @@ public class Run implements Parcelable {
         this.user = user;
     }
 
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
+    }
 }

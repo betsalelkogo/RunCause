@@ -205,4 +205,7 @@ public class Model {
     public void addLocation(String id_key, ArrayList<Location> arrLocations, AddLocationListener listener) {
         modelFirebase.saveLocation(id_key,arrLocations,listener);
     }
+    public void getLocations(Run r,GetLocationListener listener) {
+        modelFirebase.getLocationForRun(r,listener);
+    }
 }

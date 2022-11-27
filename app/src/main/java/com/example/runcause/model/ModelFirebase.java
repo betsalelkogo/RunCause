@@ -1,7 +1,10 @@
 package com.example.runcause.model;
 
+import static androidx.core.content.PackageManagerCompat.LOG_TAG;
+
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -20,16 +23,20 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -80,7 +87,6 @@ public class ModelFirebase {
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         Run r = Run.fromJson(doc.getData());
-
                         r.setId_key(doc.getId());
                         if (r != null) {
                             runList.add(r);
@@ -99,7 +105,21 @@ public class ModelFirebase {
         });
 
     }
-
+    public void getLocationForRun(Run run, GetLocationListener listener){
+        ArrayList<Location> list = new ArrayList<>();
+        DocumentReference bulletinRef = db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).document(run.getId_key()).collection("location").document();
+        bulletinRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            for(int i=0;i<document.getData().size();i++){
+                            list.add(Location.fromJson((Map<String, Object>) document.getData().get(i)));
+                        }}
+                    }
+                });
+    }
     public void addRun(@NonNull Run run,AddRunListener listener) {
         db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
                 .document(run.getId_key()).set(run.toJson())

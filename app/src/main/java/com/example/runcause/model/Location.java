@@ -1,6 +1,7 @@
 package com.example.runcause.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ public class Location  {
     }
 
     static public Location fromJson(Map<String,Object> json){
+        ArrayList<Location> list= new ArrayList<>();
         double lat = (double)json.get("lat");
         double lng = (double)json.get("lng");
         float speed = (float)json.get("speed");
