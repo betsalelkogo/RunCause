@@ -80,10 +80,10 @@ public class EndRunFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                double speed= Float.parseFloat(r.getDistance())/Float.parseFloat(r.getTime());
+                //double speed= Float.parseFloat(r.getDistance())/Float.parseFloat(r.getTime());
                 totalTime.setText(getTimerText());
-                averageTime.setText((int) speed);
-                distance.setText(r.getDistance());
+                //averageTime.setText((int) speed);
+                //distance.setText(r.getDistance());
             }
         });
     }

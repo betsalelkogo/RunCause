@@ -1,10 +1,12 @@
 package com.example.runcause.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Location {
+
+public class Location  {
     private double lat;
     private double lng;
     private float speed;
@@ -12,33 +14,8 @@ public class Location {
 
     public Location() {
     }
-
-
-    public Map<String,Object> toJson(){
-        Map<String, Object> json = new HashMap<>();
-        json.put("lat", getLat());
-        json.put("lng", getLng());
-        json.put("speed", getSpeed());
-        return json;
-    }
-
-    static Location fromJson(Map<String,Object> json){
-        String password = (String)json.get("password");
-        if (password == null){
-            return null;
-        }
-        double lat = (double)json.get("lat");
-        double lng = (double)json.get("lng");
-        float speed = (float)json.get("speed");
-        Location l = new Location();
-        l.setLat(lat);
-        l.setLng(lng);
-        l.setSpeed(speed);
-        return l;
-    }
-
     public float getSpeed() {
-        return speed;
+        return this.speed;
     }
 
     public void setSpeed(float speed) {
@@ -64,4 +41,23 @@ public class Location {
     public void setId_key(String id) {
         this.id_key=id;
     }
+     public Map<String,Object> toJson(){
+        Map<String, Object> json = new HashMap<>();
+        json.put("lat", getLat());
+        json.put("lng", getLng());
+        json.put("speed", getSpeed());
+        return json;
+    }
+
+    static public Location fromJson(Map<String,Object> json){
+        double lat = (double)json.get("lat");
+        double lng = (double)json.get("lng");
+        float speed = (float)json.get("speed");
+        Location location = new Location();
+        location.setLat(lat);
+        location.setLng(lng);
+        location.setSpeed(speed);
+        return location;
+    }
+
 }

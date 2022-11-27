@@ -47,6 +47,7 @@ public class Model {
         //1. get local last update
         Long localLastUpdate = Run.getLocalLastUpdated();
         //2. get all students record since local last update from firebase
+        List<Run> stList=new ArrayList<>();
         modelFirebase.getAllRuns(localLastUpdate,(list)->{
             if(list !=null){
                 MyApplication.executorService.execute(()->{
@@ -55,10 +56,11 @@ public class Model {
                     Long lLastUpdate = new Long(0);
                     for(Run r : list){
                         if(!r.isDeleted()) {
-                            AppLocalDB.db.runDao().insertAll(r);
+                            //AppLocalDB.db.runDao().insertAll(r);
+                            stList.add(r);
                         }
                         else {
-                            AppLocalDB.db.runDao().delete(r);
+                            //AppLocalDB.db.runDao().delete(r);
                         }
                         if (r.getLastUpdated() > lLastUpdate){
                             lLastUpdate = r.getLastUpdated();
@@ -66,10 +68,10 @@ public class Model {
                     }
                     Run.setLocalLastUpdated(lLastUpdate);
                     //5. return all records to the caller
-                    List<Run> stList = AppLocalDB.db.runDao().getAll();
+                     //= AppLocalDB.db.runDao().getAll();
                     for (Run r: stList){
                         if(r.isDeleted()){
-                            AppLocalDB.db.runDao().delete(r);
+                            //AppLocalDB.db.runDao().delete(r);
                         }
                     }
                     runsListLd.postValue(stList);
@@ -92,24 +94,19 @@ public class Model {
             listener.onComplete();
         });
     }
-    public void addLocation(ArrayList<Location> arrLocations, String email, AddLocationListener listener){
-        modelFirebase.saveRun(arrLocations,email,()->{;
-            listener.onComplete();
-        });
-    }
+//    public void addLocation(ArrayList<Location> arrLocations, String email, AddLocationListener listener){
+//        modelFirebase.saveRun(arrLocations,email,()->{;
+//            listener.onComplete();
+//        });
+//    }
     public void addUser(User user, AddUserListener listener){
         modelFirebase.addUser(user, () ->{
             listener.onComplete();
         });
 
     }
-    public LiveData<List<Run>> getRunByName(String name) {
-        return AppLocalDB.db.runDao().getRunByProject(name);
-    }
 
-    public LiveData<List<Project>> getProjectByName(String project_id) {
-        return AppLocalDB.db.projectDao().getProjectById(project_id);
-    }
+
     public void DeleteRun(Run run, DeleteRunListener listener){
         run.setDeleted(true);
         addRun(run,()->{
@@ -131,6 +128,7 @@ public class Model {
         //1. get local last update
         Long localLastUpdate = Project.getLocalLastUpdated();
         //2. get all students record since local last update from firebase
+        List<Project> projectList= new ArrayList<>();
         modelFirebase.getAllProject(localLastUpdate,(list)->{
             if(list !=null){
                 MyApplication.executorService.execute(()->{
@@ -140,23 +138,24 @@ public class Model {
                     for(Project p : list){
                         for(int i=0;i<u.getMyList().size();i++){
                         if(p.isPublic()&&p.getId_key().equalsIgnoreCase(u.getMyList().get(i))) {
-                            AppLocalDB.db.projectDao().insertAll(p);
+                            //AppLocalDB.db.projectDao().insertAll(p);
+                            projectList.add(p);
                         }
                         if (p.getLastUpdated() > lLastUpdate){
                             lLastUpdate = p.getLastUpdated();
                         }
                     }
                         if(u.getMyList().size()== 0) {
-                            AppLocalDB.db.projectDao().delete(p);
+                           // AppLocalDB.db.projectDao().delete(p);
                         }
                     }
                     Project.setLocalLastUpdated(lLastUpdate);
                     //5. return all records to the caller
-                    List<Project> projectList = AppLocalDB.db.projectDao().getAll();
+                    //List<Project> projectList = AppLocalDB.db.projectDao().getAll();
                     for (Project p: projectList){
                         for(int i=0;i<u.getMyList().size();i++){
                         if(!p.isPublic()||!p.getId_key().equalsIgnoreCase(u.getMyList().get(i))){
-                            AppLocalDB.db.projectDao().delete(p);
+                           // AppLocalDB.db.projectDao().delete(p);
                         }
                     }}
                     projectListLd.postValue(projectList);
@@ -170,6 +169,7 @@ public class Model {
         //1. get local last update
         Long localLastUpdate = Project.getLocalLastUpdated();
         //2. get all students record since local last update from firebase
+        List<Project> projectList=new ArrayList<>();
         modelFirebase.getAllProject(localLastUpdate,(list)->{
             if(list !=null){
                 MyApplication.executorService.execute(()->{
@@ -178,10 +178,11 @@ public class Model {
                     Long lLastUpdate = new Long(0);
                     for(Project p : list){
                         if(p.isPublic()) {
-                            AppLocalDB.db.projectDao().insertAll(p);
+                            projectList.add(p);
+                            //AppLocalDB.db.projectDao().insertAll(p);
                         }
                         else {
-                            AppLocalDB.db.projectDao().delete(p);
+                            //AppLocalDB.db.projectDao().delete(p);
                         }
                         if (p.getLastUpdated() > lLastUpdate){
                             lLastUpdate = p.getLastUpdated();
@@ -189,10 +190,10 @@ public class Model {
                     }
                     Project.setLocalLastUpdated(lLastUpdate);
                     //5. return all records to the caller
-                    List<Project> projectList = AppLocalDB.db.projectDao().getAll();
+                    //List<Project> projectList = AppLocalDB.db.projectDao().getAll();
                     for (Project p: projectList){
                         if(!p.isPublic()){
-                            AppLocalDB.db.projectDao().delete(p);
+                            //AppLocalDB.db.projectDao().delete(p);
                         }
                     }
                     allProjectListLd.postValue(projectList);
@@ -200,5 +201,9 @@ public class Model {
                 });
             }
         });
+    }
+
+    public void addLocation(String id_key, ArrayList<Location> arrLocations, AddLocationListener listener) {
+        modelFirebase.saveLocation(id_key,arrLocations,listener);
     }
 }

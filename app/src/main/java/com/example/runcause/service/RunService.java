@@ -16,17 +16,21 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
 
 import com.example.runcause.MyApplication;
 import com.example.runcause.R;
+import com.example.runcause.RunScreenFragmentDirections;
 import com.example.runcause.model.Model;
 import com.example.runcause.model.Run;
 import com.example.runcause.model.intefaces.AddLocationListener;
+import com.example.runcause.model.intefaces.AddRunListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
@@ -56,7 +60,8 @@ public class RunService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.hasExtra("stop")) {
-            saveLocationsToFirestore();
+            String json = intent.getStringExtra("run_data");
+            saveLocationsToFirestore(json);
             stopSelf();
         }
         else if (intent.hasExtra("getLocations")){
@@ -68,13 +73,21 @@ public class RunService extends Service {
         return START_NOT_STICKY;
     }
 
-    private void saveLocationsToFirestore() {
-        Model.instance.addLocation(arrLocations, FirebaseAuth.getInstance().getCurrentUser().getEmail().toString(), new AddLocationListener() {
+    private void saveLocationsToFirestore(String json) {
+        Run run = new Gson().fromJson(json,Run.class);
+        Model.instance.addRun(run, new AddRunListener() {
             @Override
             public void onComplete() {
-                //Todo
+
+                Model.instance.addLocation(run.getId_key(),arrLocations, new AddLocationListener() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(getApplicationContext(),"Save completed",Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
+
     }
     private void sendMessageToActivity() {
         Intent intent = new Intent("GPSLocationUpdates");

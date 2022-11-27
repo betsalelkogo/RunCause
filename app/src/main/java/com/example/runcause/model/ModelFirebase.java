@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.example.runcause.LocationHelper;
 import com.example.runcause.model.intefaces.AddLocationListener;
 import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
@@ -101,7 +102,7 @@ public class ModelFirebase {
 
     public void addRun(@NonNull Run run,AddRunListener listener) {
         db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
-                .document().set(run.toJson())
+                .document(run.getId_key()).set(run.toJson())
                 .addOnSuccessListener((successListener)-> {
                     listener.onComplete();
                 })
@@ -211,19 +212,7 @@ public class ModelFirebase {
 
     }
 
-    public void saveRun(ArrayList<Location> arrLocations,String email,AddLocationListener listener){
-        Map<String,Object>json =new HashMap<>();
-        for(int i=0;i<arrLocations.size();i++){
-            json.put(""+i,arrLocations.get(i).toJson());
-        }
-        db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).getFirestore().collection("users").document(email)
-                .collection("location").document()
-                .set(json)
-                .addOnSuccessListener((successListener)-> {
-                    listener.onComplete();
-                })
-                .addOnFailureListener((e)-> { });
-    }
+
 
     public void getLocationByRunId(String id, GetLocationListener listener) {
         db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).document(id).collection("location").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -233,7 +222,6 @@ public class ModelFirebase {
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         Location l = Location.fromJson(doc.getData());
-
                         l.setId_key(doc.getId());
                         if (l != null) {
                             arrLocation.add(l);
@@ -251,5 +239,20 @@ public class ModelFirebase {
             }
         });
 
+    }
+
+    public void saveLocation(String id_key, ArrayList<Location> arrLocations, AddLocationListener listener) {
+        Map<String, Object> json = new HashMap<>();
+        for(int i=0;i<arrLocations.size();i++)
+        {
+            json.put(""+i,arrLocations.get(i).toJson());
+        }
+        db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
+                .document(id_key).collection("location").document().set(json)
+                .addOnSuccessListener((successListener)-> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener((e)-> {
+                });
     }
 }

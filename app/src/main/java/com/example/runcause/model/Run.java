@@ -33,7 +33,6 @@ public class Run implements Parcelable {
     private String user;
     private boolean isDeleted;
     private Long lastUpdated = new Long(0);
-    private ArrayList<Location> locations;
 
 
     public Run(String distance,String projectId,String date, String time,String calories,String user,boolean isDeleted){
@@ -87,7 +86,6 @@ public class Run implements Parcelable {
         json.put("date", getDate());
         json.put("user", getUser());
         json.put("isDeleted", isDeleted());
-        json.put("location", getLocations());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
 
         return json;
@@ -105,10 +103,8 @@ public class Run implements Parcelable {
         String date = (String)json.get("date");
         String user = (String)json.get("user");
         boolean isDeleted = (boolean)json.get("isDeleted");
-        ArrayList<Location> locations= (ArrayList<Location>) json.get("location");
         Run r = new Run(distance,projectId,date,time,calories,user,isDeleted);
         r.setDeleted(isDeleted);
-        r.setLocations(locations);
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
         r.setLastUpdated(new Long(ts.getSeconds()));
         return r;
@@ -224,11 +220,4 @@ public class Run implements Parcelable {
         this.user = user;
     }
 
-    public ArrayList<Location> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(ArrayList<Location> locations) {
-        this.locations = locations;
-    }
 }

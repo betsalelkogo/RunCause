@@ -65,7 +65,7 @@ public class RunScreenFragment extends Fragment {
     boolean isTracking = false;
     static Handler handler;
     ArrayList<Location> locations;
-
+    Run r;
 
 
     @Override
@@ -104,33 +104,37 @@ public class RunScreenFragment extends Fragment {
         saveRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyApplication.getContext(), RunService.class);
-                intent.putExtra("stop", true);
-                ContextCompat.startForegroundService(MyApplication.getContext(), intent);
-                timerTask.cancel();
-                Run r = new Run();
-                r.setDate(new Date().toString());
-                r.setDistance(distance.toString());
-                r.setTime(time.toString());
-                r.setProjectId(p.getId_key());
-                r.setUser(user.getEmail());
-                r.setLocations(locations);
-                time = 0.0;
-                isTracking = false;
-                totalTime.setText(formatTime(0, 0, 0));
-                Model.instance.addRun(r, new AddRunListener() {
-                    @Override
-                    public void onComplete() {
-                        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r);
-                        Navigation.findNavController(view).navigate(action);
-                    }
-                });
+
+                saveRunToFirestore();
             }
         });
         InitialGoogleMap(savedInstanceState);
         setLocationBroadcast();
 
         return view;
+    }
+
+    private void saveRunToFirestore() {
+        timerTask.cancel();
+        r = new Run();
+        r.setDate(new Date().toString());
+        r.setDistance(distance.toString());
+        r.setTime(time.toString());
+        r.setProjectId(p.getId_key());
+        r.setUser(user.getEmail());
+        r.setId_key("run_" + System.currentTimeMillis());
+        time = 0.0;
+        isTracking = false;
+        totalTime.setText(formatTime(0, 0, 0));
+
+        Intent intent = new Intent(MyApplication.getContext(), RunService.class);
+        intent.putExtra("stop", true);
+        intent.putExtra("run_data",new Gson().toJson(r));
+        ContextCompat.startForegroundService(MyApplication.getContext(), intent);
+
+        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r);
+        Navigation.findNavController(view).navigate(action);
+
     }
 
     private void startGpsService() {
