@@ -13,6 +13,7 @@ import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.model.intefaces.AddUserListener;
 import com.example.runcause.model.intefaces.DeleteRunListener;
 import com.example.runcause.model.intefaces.GetLocationListener;
+import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 
@@ -94,11 +95,9 @@ public class Model {
             listener.onComplete();
         });
     }
-//    public void addLocation(ArrayList<Location> arrLocations, String email, AddLocationListener listener){
-//        modelFirebase.saveRun(arrLocations,email,()->{;
-//            listener.onComplete();
-//        });
-//    }
+    public void getProjectbyId(String id, GetProjectByNameListener listener) {
+        modelFirebase.getProjectByName(id,listener);
+    }
     public void addUser(User user, AddUserListener listener){
         modelFirebase.addUser(user, () ->{
             listener.onComplete();

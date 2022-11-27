@@ -18,15 +18,19 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.runcause.MyApplication;
 import com.example.runcause.R;
 import com.example.runcause.RunScreenFragmentDirections;
+import com.example.runcause.UI.ListProjectFragmentViewModel;
+import com.example.runcause.UI.RunLocationViewModel;
 import com.example.runcause.model.Model;
 import com.example.runcause.model.Run;
 import com.example.runcause.model.intefaces.AddLocationListener;
@@ -43,7 +47,7 @@ public class RunService extends Service {
     private LocationManager mLocationManager;
     private LocationListener locationListener;
     ArrayList<com.example.runcause.model.Location> arrLocations;
-
+    RunLocationViewModel viewModel= new RunLocationViewModel();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -74,6 +78,7 @@ public class RunService extends Service {
     }
 
     private void saveLocationsToFirestore(String json) {
+        viewModel.setData(arrLocations);
         Run run = new Gson().fromJson(json,Run.class);
         Model.instance.addRun(run, new AddRunListener() {
             @Override

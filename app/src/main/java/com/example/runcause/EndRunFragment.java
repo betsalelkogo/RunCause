@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.runcause.UI.RunLocationViewModel;
 import com.example.runcause.model.Constants;
 import com.example.runcause.model.Location;
 import com.example.runcause.model.Model;
@@ -25,6 +27,7 @@ import com.example.runcause.model.Run;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.PermissionCallback;
 import com.example.runcause.model.intefaces.GetLocationListener;
+import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -46,9 +49,12 @@ public class EndRunFragment extends Fragment {
     Button closeBtn;
     Run r;
     User user;
+    Project p;
     OnMapReadyCallback onMapReadyCallback;
     static Handler handler;
-    ArrayList<Location> locations=new ArrayList<>();
+    ArrayList<Location> locations;
+    RunLocationViewModel viewModel= new RunLocationViewModel();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,19 +62,28 @@ public class EndRunFragment extends Fragment {
         view= inflater.inflate(R.layout.fragment_end_run, container, false);
         user=EndRunFragmentArgs.fromBundle(getArguments()).getUser();
         r=EndRunFragmentArgs.fromBundle(getArguments()).getRun();
+
         closeBtn=view.findViewById(R.id.btn_close_run_detailes);
         averageTime = view.findViewById(R.id.tvSpeed);
         distance = view.findViewById(R.id.tvDistance);
         totalTime = view.findViewById(R.id.tvTime);
         map = view.findViewById(R.id.mapView);
-//        Model.instance.getLocationById(r.getId_key(), new GetLocationListener() {
-//            @Override
-//            public void onComplete(ArrayList<Location> arrLocation) {
-//                locations=arrLocation;
-//            }
-//        });
+        locations=viewModel.getData();
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EndRunFragmentDirections.ActionEndRunFragmentToUserHomePageFragment action =EndRunFragmentDirections.actionEndRunFragmentToUserHomePageFragment(user,p);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
         InitialGoogleMap(savedInstanceState);
         updateDetails();
+        Model.instance.getProjectbyId(r.getProjectId(), new GetProjectByNameListener() {
+            @Override
+            public void onComplete(Project project) {
+                p=project;
+            }
+        });
         drawRunOnMap((ArrayList<Location>) locations);
         return view;
     }
