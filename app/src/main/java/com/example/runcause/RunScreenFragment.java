@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.runcause.model.Constants;
 import com.example.runcause.model.Location;
@@ -31,6 +32,7 @@ import com.example.runcause.model.Project;
 import com.example.runcause.model.Run;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.PermissionCallback;
+import com.example.runcause.model.intefaces.AddLocationListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.service.RunService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -131,10 +133,20 @@ public class RunScreenFragment extends Fragment {
         intent.putExtra("stop", true);
         intent.putExtra("run_data",new Gson().toJson(r));
         ContextCompat.startForegroundService(MyApplication.getContext(), intent);
+        Model.instance.addRun(r, new AddRunListener() {
+            @Override
+            public void onComplete() {
+                Model.instance.addLocation(r.getId_key(),locations, new AddLocationListener() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(MyApplication.getContext(),"Save completed",Toast.LENGTH_LONG).show();
+                        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r);
+                        Navigation.findNavController(view).navigate(action);
 
-        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r);
-        Navigation.findNavController(view).navigate(action);
-
+                    }
+                });
+            }
+        });
     }
 
     private void startGpsService() {
@@ -195,7 +207,6 @@ public class RunScreenFragment extends Fragment {
         });
     }
     private void setLocationBroadcast(){
-
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

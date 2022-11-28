@@ -51,7 +51,7 @@ public class Location  {
     }
 
     static public Location fromJson(Map<String,Object> json){
-        ArrayList<Location> list= new ArrayList<>();
+        if(json==null) return null;
         double lat = (double)json.get("lat");
         double lng = (double)json.get("lng");
         float speed = (float)json.get("speed");

@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,6 @@ public class RunService extends Service {
     private LocationManager mLocationManager;
     private LocationListener locationListener;
     ArrayList<com.example.runcause.model.Location> arrLocations;
-    RunLocationViewModel viewModel= new RunLocationViewModel();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -65,7 +65,7 @@ public class RunService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.hasExtra("stop")) {
             String json = intent.getStringExtra("run_data");
-            saveLocationsToFirestore(json);
+            //saveLocationsToFirestore(json);
             stopSelf();
         }
         else if (intent.hasExtra("getLocations")){
@@ -78,7 +78,6 @@ public class RunService extends Service {
     }
 
     private void saveLocationsToFirestore(String json) {
-        viewModel.setData(arrLocations);
         Run run = new Gson().fromJson(json,Run.class);
         Model.instance.addRun(run, new AddRunListener() {
             @Override
@@ -88,6 +87,8 @@ public class RunService extends Service {
                     @Override
                     public void onComplete() {
                         Toast.makeText(getApplicationContext(),"Save completed",Toast.LENGTH_LONG).show();
+
+
                     }
                 });
             }

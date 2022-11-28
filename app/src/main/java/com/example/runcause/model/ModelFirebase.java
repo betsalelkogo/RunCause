@@ -1,14 +1,10 @@
 package com.example.runcause.model;
 
-import static androidx.core.content.PackageManagerCompat.LOG_TAG;
-
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.runcause.LocationHelper;
 import com.example.runcause.model.intefaces.AddLocationListener;
 import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
@@ -23,26 +19,20 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class ModelFirebase {
@@ -107,7 +97,7 @@ public class ModelFirebase {
     }
     public void getLocationForRun(Run run, GetLocationListener listener){
         ArrayList<Location> list = new ArrayList<>();
-        DocumentReference bulletinRef = db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).document(run.getId_key()).collection("location").document();
+        DocumentReference bulletinRef = db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION).document(run.getId_key()).collection("location").document(run.getId_key());
         bulletinRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -115,8 +105,12 @@ public class ModelFirebase {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             for(int i=0;i<document.getData().size();i++){
-                            list.add(Location.fromJson((Map<String, Object>) document.getData().get(i)));
-                        }}
+                                if(document.getData()==null) break;
+                                Location l =Location.fromJson((Map<String, Object>) document.getData());
+                                list.add(l);
+                            }
+
+                        }
                     }
                 });
     }
@@ -268,7 +262,7 @@ public class ModelFirebase {
             json.put(""+i,arrLocations.get(i).toJson());
         }
         db.collection(Constants.MODEL_FIRE_BASE_RUNS_COLLECTION)
-                .document(id_key).collection("location").document().set(json)
+                .document(id_key).collection("location").document(id_key).set(json)
                 .addOnSuccessListener((successListener)-> {
                     listener.onComplete();
                 })

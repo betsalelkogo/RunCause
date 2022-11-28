@@ -64,6 +64,7 @@ public class EndRunFragment extends Fragment {
             @Override
             public void onComplete(ArrayList<Location> arrLocation) {
                 r.setLocations(arrLocation);
+                drawRunOnMap(r.getLocations());
             }
         });
         closeBtn=view.findViewById(R.id.btn_close_run_detailes);
@@ -86,7 +87,6 @@ public class EndRunFragment extends Fragment {
                 p=project;
             }
         });
-        drawRunOnMap(r.getLocations());
         return view;
     }
 
