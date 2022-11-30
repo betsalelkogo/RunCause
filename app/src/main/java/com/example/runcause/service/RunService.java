@@ -87,8 +87,6 @@ public class RunService extends Service {
                     @Override
                     public void onComplete() {
                         Toast.makeText(getApplicationContext(),"Save completed",Toast.LENGTH_LONG).show();
-
-
                     }
                 });
             }

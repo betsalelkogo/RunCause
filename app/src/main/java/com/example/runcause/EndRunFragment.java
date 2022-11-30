@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.runcause.UI.RunLocationViewModel;
 import com.example.runcause.model.Constants;
@@ -35,7 +36,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,6 +55,8 @@ public class EndRunFragment extends Fragment {
     User user;
     Project p;
     OnMapReadyCallback onMapReadyCallback;
+    Location[] locations;
+    ArrayList<Location> locationsList=new ArrayList<>();
     static Handler handler;
 
     @Override
@@ -60,13 +66,11 @@ public class EndRunFragment extends Fragment {
         view= inflater.inflate(R.layout.fragment_end_run, container, false);
         user=EndRunFragmentArgs.fromBundle(getArguments()).getUser();
         r=EndRunFragmentArgs.fromBundle(getArguments()).getRun();
-        Model.instance.getLocations(r, new GetLocationListener() {
-            @Override
-            public void onComplete(ArrayList<Location> arrLocation) {
-                r.setLocations(arrLocation);
-                drawRunOnMap(r.getLocations());
-            }
-        });
+        locations=EndRunFragmentArgs.fromBundle(getArguments()).getLocations();
+        Collections.addAll(locationsList, locations);
+        r.setLocations(locationsList);
+        drawRunOnMap(r.getLocations());
+        Toast.makeText(MyApplication.getContext(),"Draw completed",Toast.LENGTH_LONG).show();
         closeBtn=view.findViewById(R.id.btn_close_run_detailes);
         averageTime = view.findViewById(R.id.tvSpeed);
         distance = view.findViewById(R.id.tvDistance);
@@ -97,10 +101,10 @@ public class EndRunFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                //double speed= Float.parseFloat(r.getDistance())/Float.parseFloat(r.getTime());
+                double speed= Float.parseFloat(r.getDistance())/Float.parseFloat(r.getTime());
                 totalTime.setText(getTimerText());
-                //averageTime.setText((int) speed);
-                //distance.setText(r.getDistance());
+                averageTime.setText(new DecimalFormat("##.##").format(speed));
+                distance.setText(String.format("%.2f KM", Float.parseFloat(r.getDistance())));
             }
         });
     }
@@ -119,10 +123,8 @@ public class EndRunFragment extends Fragment {
                     public void onResult(boolean isGranted) {
                         if (isGranted) {
                             googleMap = map;
-
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(32.12354,35.546412),15F));
-
                             map.setMyLocationEnabled(true);
+
 
                         }
                     }
@@ -151,8 +153,10 @@ public class EndRunFragment extends Fragment {
                 for(Location l : locations){
                     list.add(new LatLng(l.getLat(),l.getLng()));
                 }
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.get(0).getLat(),locations.get(0).getLng()),15F));
+
                 googleMap.addPolyline(new PolylineOptions()
-                        .clickable(false).color(R.color.purple_500)
+                        .clickable(false).color(R.color.teal_200)
                         .addAll(list));
             }
         });

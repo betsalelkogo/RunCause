@@ -1,5 +1,8 @@
 package com.example.runcause.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Location  {
+public class Location  implements Parcelable {
     private double lat;
     private double lng;
     private float speed;
@@ -15,6 +18,26 @@ public class Location  {
 
     public Location() {
     }
+
+    protected Location(Parcel in) {
+        lat = in.readDouble();
+        lng = in.readDouble();
+        speed = in.readFloat();
+        id_key = in.readString();
+    }
+
+    public static final Creator<Location> CREATOR = new Creator<Location>() {
+        @Override
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
+        }
+
+        @Override
+        public Location[] newArray(int size) {
+            return new Location[size];
+        }
+    };
+
     public float getSpeed() {
         return this.speed;
     }
@@ -62,4 +85,16 @@ public class Location  {
         return location;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(lat);
+        dest.writeDouble(lng);
+        dest.writeFloat(speed);
+        dest.writeString(id_key);
+    }
 }

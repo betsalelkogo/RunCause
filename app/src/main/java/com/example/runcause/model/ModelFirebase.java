@@ -106,7 +106,7 @@ public class ModelFirebase {
                             DocumentSnapshot document = task.getResult();
                             for(int i=0;i<document.getData().size();i++){
                                 if(document.getData()==null) break;
-                                Location l =Location.fromJson((Map<String, Object>) document.getData());
+                                Location l =Location.fromJson((Map<String, Object>) document.getData().get(i));
                                 list.add(l);
                             }
 

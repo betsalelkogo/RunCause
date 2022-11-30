@@ -33,6 +33,7 @@ import com.example.runcause.model.Run;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.PermissionCallback;
 import com.example.runcause.model.intefaces.AddLocationListener;
+import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
 import com.example.runcause.service.RunService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,6 +45,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -58,12 +60,13 @@ public class RunScreenFragment extends Fragment {
     TextView averageTime, distance, totalTime;
     View view;
     OnMapReadyCallback onMapReadyCallback;
-    Button startRun, saveRun,btnDraw ;//,pauseRun;
+    Button startRun, saveRun ;
     Timer timer;
     TimerTask timerTask;
     Project p;
     User user;
-    Double time = 0.0, distanceRun = 0.0, avgSpeed = 0.0;
+    Double time = 0.0;
+    float distanceRun =0;
     boolean isTracking = false;
     static Handler handler;
     ArrayList<Location> locations;
@@ -82,17 +85,9 @@ public class RunScreenFragment extends Fragment {
         totalTime = view.findViewById(R.id.tvTime);
         startRun = view.findViewById(R.id.btn_close_run_detailes);
         saveRun = view.findViewById(R.id.btnSaveJourney);
-        btnDraw = view.findViewById(R.id.btnDraw);
+
         //todo: add the pause option for the timer
 
-        btnDraw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyApplication.getContext(), RunService.class);
-                intent.putExtra("getLocations", true);
-                ContextCompat.startForegroundService(MyApplication.getContext(), intent);
-            }
-        });
 
         timer = new Timer();
         startRun.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +101,6 @@ public class RunScreenFragment extends Fragment {
         saveRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 saveRunToFirestore();
             }
         });
@@ -117,10 +111,11 @@ public class RunScreenFragment extends Fragment {
     }
 
     private void saveRunToFirestore() {
+        p.setRunDistance(String.valueOf(Integer.parseInt(p.getRunDistance())+distanceRun));
         timerTask.cancel();
         r = new Run();
         r.setDate(new Date().toString());
-        r.setDistance(distance.toString());
+        r.setDistance(""+distanceRun);
         r.setTime(time.toString());
         r.setProjectId(p.getId_key());
         r.setUser(user.getEmail());
@@ -133,6 +128,12 @@ public class RunScreenFragment extends Fragment {
         intent.putExtra("stop", true);
         intent.putExtra("run_data",new Gson().toJson(r));
         ContextCompat.startForegroundService(MyApplication.getContext(), intent);
+        Model.instance.addProject(p, new AddProjectListener() {
+            @Override
+            public void onComplete() {
+                Toast.makeText(MyApplication.getContext(),"Project Updated completed",Toast.LENGTH_LONG).show();
+            }
+        });
         Model.instance.addRun(r, new AddRunListener() {
             @Override
             public void onComplete() {
@@ -140,7 +141,7 @@ public class RunScreenFragment extends Fragment {
                     @Override
                     public void onComplete() {
                         Toast.makeText(MyApplication.getContext(),"Save completed",Toast.LENGTH_LONG).show();
-                        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r);
+                        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r, (Location[]) locations.toArray());
                         Navigation.findNavController(view).navigate(action);
 
                     }
@@ -199,9 +200,8 @@ public class RunScreenFragment extends Fragment {
                 for(Location l : locations){
                     list.add(new LatLng(l.getLat(),l.getLng()));
                 }
-
                 googleMap.addPolyline(new PolylineOptions()
-                        .clickable(false).color(R.color.purple_500)
+                        .clickable(false).color(R.color.teal_200)
                         .addAll(list));
             }
         });
@@ -281,8 +281,18 @@ public class RunScreenFragment extends Fragment {
                     public void run() {
                         time++;
                         totalTime.setText(getTimerText());
-                        averageTime.setText("45");
-                        distance.setText("78");
+                        if(locations!=null){
+                            for(int i =0;i<locations.size();i++){
+                                averageTime.setText(new DecimalFormat("##.##").format(locations.get(i).getSpeed()));
+                                if(i>1){
+                                    int R = 6371; // km
+                                    double x = (locations.get(i).getLng() - locations.get(i-1).getLng()) * Math.cos((locations.get(i-1).getLat() + locations.get(i).getLat()) / 2);
+                                    double y = (locations.get(i).getLat()- locations.get(i-1).getLat());
+                                    distanceRun += (Math.sqrt(x * x + y * y) * R)/10;
+                                }
+                                distance.setText(new DecimalFormat("##.##").format(distanceRun)+"KM");
+                            }
+                        }
                     }
                 });
 

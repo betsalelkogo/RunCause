@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -21,18 +22,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
 import com.example.runcause.UI.UserProjectListFragmentViewModel;
 import com.example.runcause.UI.UserRunListFragmentViewModel;
 import com.example.runcause.model.LoadingState;
+import com.example.runcause.model.Location;
 import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
+import com.example.runcause.model.Run;
 import com.example.runcause.model.User;
 import com.example.runcause.model.adapter.AdapterProject;
 import com.example.runcause.model.adapter.MyAdapter;
+import com.example.runcause.model.intefaces.GetLocationListener;
 import com.example.runcause.model.intefaces.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -87,12 +93,24 @@ public class UserRunListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                progressBar.setVisibility(View.GONE);
-                UserRunListFragmentDirections.ActionUserRunListFragmentToEndRunFragment action =UserRunListFragmentDirections.actionUserRunListFragmentToEndRunFragment(user,viewModel.getData().getValue().get(position));
-                Navigation.findNavController(view).navigate(action);
+                progressBar.setVisibility(View.VISIBLE);
+                Run r=viewModel.getData().getValue().get(position);
+                goToScreen(r);
             }
+
+
         });
 
         return view;
+    }
+    private void goToScreen(Run run) {
+        Model.instance.getLocations(run, new GetLocationListener() {
+            @Override
+            public void onComplete(ArrayList<Location> arrLocation) {
+                Toast.makeText(MyApplication.getContext(),"location load completed", Toast.LENGTH_LONG).show();
+                UserRunListFragmentDirections.ActionUserRunListFragmentToEndRunFragment action =UserRunListFragmentDirections.actionUserRunListFragmentToEndRunFragment(user,run, (Location[]) arrLocation.toArray());
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
     }
 }

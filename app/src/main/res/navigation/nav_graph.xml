@@ -98,6 +98,9 @@
         <action
             android:id="@+id/action_endRunFragment_to_userHomePageFragment"
             app:destination="@id/userHomePageFragment" />
+        <argument
+            android:name="locations"
+            app:argType="com.example.runcause.model.Location[]" />
     </fragment>
     <fragment
         android:id="@+id/userRunListFragment"
