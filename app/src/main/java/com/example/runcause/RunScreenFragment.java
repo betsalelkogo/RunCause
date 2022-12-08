@@ -300,7 +300,7 @@ public class RunScreenFragment extends Fragment {
                                     int R = 6371; // km
                                     double x = (locations.get(i).getLng() - locations.get(i-1).getLng()) * Math.cos((locations.get(i-1).getLat() + locations.get(i).getLat()) / 2);
                                     double y = (locations.get(i).getLat()- locations.get(i-1).getLat());
-                                    distanceRun += (Math.sqrt(x * x + y * y) * R)/10;
+                                    distanceRun += (Math.sqrt(x * x + y * y) * R)/100;
                                 }
                                 distance.setText(new DecimalFormat("##.##").format(distanceRun)+"KM");
                             }

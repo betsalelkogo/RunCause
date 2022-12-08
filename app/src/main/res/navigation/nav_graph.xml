@@ -100,7 +100,8 @@
             app:destination="@id/userHomePageFragment" />
         <argument
             android:name="locations"
-            app:argType="com.example.runcause.model.Location[]" />
+            app:argType="com.example.runcause.model.Location[]"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/userRunListFragment"

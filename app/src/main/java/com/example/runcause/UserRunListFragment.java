@@ -95,22 +95,13 @@ public class UserRunListFragment extends Fragment {
             public void onItemClick(int position, View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 Run r=viewModel.getData().getValue().get(position);
-                goToScreen(r);
+                UserRunListFragmentDirections.ActionUserRunListFragmentToEndRunFragment action =UserRunListFragmentDirections.actionUserRunListFragmentToEndRunFragment(user,r,null);
+                Navigation.findNavController(view).navigate(action);
             }
 
 
         });
 
         return view;
-    }
-    private void goToScreen(Run run) {
-        Model.instance.getLocations(run, new GetLocationListener() {
-            @Override
-            public void onComplete(ArrayList<Location> arrLocation) {
-                Toast.makeText(MyApplication.getContext(),"location load completed", Toast.LENGTH_LONG).show();
-                UserRunListFragmentDirections.ActionUserRunListFragmentToEndRunFragment action =UserRunListFragmentDirections.actionUserRunListFragmentToEndRunFragment(user,run, (Location[]) arrLocation.toArray());
-                Navigation.findNavController(view).navigate(action);
-            }
-        });
     }
 }

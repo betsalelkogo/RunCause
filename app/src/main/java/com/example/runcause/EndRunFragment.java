@@ -68,11 +68,22 @@ public class EndRunFragment extends Fragment {
         user=EndRunFragmentArgs.fromBundle(getArguments()).getUser();
         r=EndRunFragmentArgs.fromBundle(getArguments()).getRun();
         locations=EndRunFragmentArgs.fromBundle(getArguments()).getLocations();
-        lastKnownLocation=new LatLng(locations[0].getLat(),locations[0].getLng());
-        Collections.addAll(locationsList, locations);
-        r.setLocations(locationsList);
-        drawRunOnMap(r.getLocations());
-        Toast.makeText(MyApplication.getContext(),"Draw completed",Toast.LENGTH_LONG).show();
+        if(locations!=null){
+            lastKnownLocation=new LatLng(locations[0].getLat(),locations[0].getLng());
+            Collections.addAll(locationsList, locations);
+            r.setLocations(locationsList);
+            drawRunOnMap(r.getLocations());
+            Toast.makeText(MyApplication.getContext(),"Draw completed",Toast.LENGTH_LONG).show();
+        }else{
+            Model.instance.getLocations(r, new GetLocationListener() {
+                @Override
+                public void onComplete(ArrayList<Location> arrLocation) {
+                    r.setLocations(locationsList);
+                    drawRunOnMap(r.getLocations());
+                    Toast.makeText(MyApplication.getContext(),"Draw completed",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
         closeBtn=view.findViewById(R.id.btn_close_run_detailes);
         averageTime = view.findViewById(R.id.tvSpeed);
         distance = view.findViewById(R.id.tvDistance);
@@ -162,7 +173,7 @@ public class EndRunFragment extends Fragment {
                 for(Location l : locations){
                     list.add(new LatLng(l.getLat(),l.getLng()));
                 }
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.get(0).getLat(),locations.get(0).getLng()),15F));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.get(0).getLat(),locations.get(0).getLng()),12F));
 
                 googleMap.addPolyline(new PolylineOptions()
                         .clickable(false).color(R.color.teal_200)
