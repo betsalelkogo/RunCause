@@ -41,6 +41,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
@@ -71,6 +72,7 @@ public class RunScreenFragment extends Fragment {
     static Handler handler;
     ArrayList<Location> locations;
     Run r;
+    LatLng lastKnownLocation = null;
 
 
     @Override
@@ -111,7 +113,7 @@ public class RunScreenFragment extends Fragment {
     }
 
     private void saveRunToFirestore() {
-        p.setRunDistance(String.valueOf(Integer.parseInt(p.getRunDistance())+distanceRun));
+        p.setRunDistance(String.valueOf(Float.parseFloat(p.getRunDistance())+distanceRun));
         timerTask.cancel();
         r = new Run();
         r.setDate(new Date().toString());
@@ -140,8 +142,12 @@ public class RunScreenFragment extends Fragment {
                 Model.instance.addLocation(r.getId_key(),locations, new AddLocationListener() {
                     @Override
                     public void onComplete() {
+                        Location[] locations1 = new Location[locations.size()];
+                        for(int i=0;i<locations1.length;i++){
+                            locations1[i]=locations.get(i);
+                        }
                         Toast.makeText(MyApplication.getContext(),"Save completed",Toast.LENGTH_LONG).show();
-                        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r, (Location[]) locations.toArray());
+                        RunScreenFragmentDirections.ActionRunScreenFragmentToEndRunFragment action = RunScreenFragmentDirections.actionRunScreenFragmentToEndRunFragment(user, r, locations1);
                         Navigation.findNavController(view).navigate(action);
 
                     }
@@ -172,13 +178,19 @@ public class RunScreenFragment extends Fragment {
                         if (isGranted) {
                             googleMap = map;
 
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(32.12354,35.546412),15F));
 
                             map.setMyLocationEnabled(true);
 
                         }
                     }
                 };
+                map.setOnMapClickListener(latLng -> {
+                    lastKnownLocation = new LatLng(latLng.latitude, latLng.longitude);
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastKnownLocation,12F));
+
+                });
+                if (lastKnownLocation == null)
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.789080,34.654600), 7.5F));
                 if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);

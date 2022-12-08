@@ -58,6 +58,7 @@ public class EndRunFragment extends Fragment {
     Location[] locations;
     ArrayList<Location> locationsList=new ArrayList<>();
     static Handler handler;
+    LatLng lastKnownLocation = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +68,7 @@ public class EndRunFragment extends Fragment {
         user=EndRunFragmentArgs.fromBundle(getArguments()).getUser();
         r=EndRunFragmentArgs.fromBundle(getArguments()).getRun();
         locations=EndRunFragmentArgs.fromBundle(getArguments()).getLocations();
+        lastKnownLocation=new LatLng(locations[0].getLat(),locations[0].getLng());
         Collections.addAll(locationsList, locations);
         r.setLocations(locationsList);
         drawRunOnMap(r.getLocations());
@@ -129,6 +131,13 @@ public class EndRunFragment extends Fragment {
                         }
                     }
                 };
+                map.setOnMapClickListener(latLng -> {
+                    lastKnownLocation = new LatLng(latLng.latitude, latLng.longitude);
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastKnownLocation,12F));
+
+                });
+                if (lastKnownLocation == null)
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.789080,34.654600), 7.5F));
                 if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
