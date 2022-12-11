@@ -30,6 +30,7 @@ public class Project implements Parcelable {
     private String ttl;
     private String name;
     private boolean isPublic;
+    private boolean done=false;
     private Long lastUpdated = new Long(0);
 
     public Project(String totalDistance,String runDistance,String ttl,boolean isPublic,String projectName,String projectDetails,String name){
@@ -45,6 +46,7 @@ public class Project implements Parcelable {
     public Project() {
     }
 
+
     protected Project(Parcel in) {
         id_key = in.readString();
         totalDistance = in.readString();
@@ -54,6 +56,7 @@ public class Project implements Parcelable {
         ttl = in.readString();
         name = in.readString();
         isPublic = in.readByte() != 0;
+        done = in.readByte() != 0;
         if (in.readByte() == 0) {
             lastUpdated = null;
         } else {
@@ -82,6 +85,7 @@ public class Project implements Parcelable {
         json.put("projectName", getProjectName());
         json.put("projectDetails", getProjectDetails());
         json.put("name", getName());
+        json.put("done", isDone());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
     }
@@ -98,8 +102,10 @@ public class Project implements Parcelable {
         String projectDetails = (String)json.get("projectDetails");
         String name = (String)json.get("name");
         boolean isPublic = (boolean)json.get("isPublic");
+        boolean isDone = (boolean)json.get("done");
         Project p = new Project(totalDistance,runDistance,ttl,isPublic,projectName,projectDetails,name);
         p.setPublic(isPublic);
+        p.setDone(isDone);
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
         p.setLastUpdated(new Long(ts.getSeconds()));
         return p;
@@ -210,5 +216,13 @@ public class Project implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }

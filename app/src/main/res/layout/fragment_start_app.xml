@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6A21DAF3"
+    android:background="#6FF4F4F3"
     tools:context=".StartAppFragment">
 
 
@@ -28,6 +28,8 @@
         android:layout_marginTop="200dp"
         android:layout_marginEnd="24dp"
         android:text="REGISTER"
+        android:backgroundTint="#FFD740"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +42,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="SIGN IN"
+        android:backgroundTint="#FFD740"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

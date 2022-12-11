@@ -48,9 +48,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Run r = data.get(position);
-        holder.nameTv.setText(r.getProjectId());
-        holder.targetKm.setText(r.getDistance());
-        holder.doneKm.setText(r.getDistance());
+        holder.date.setText(r.getDate());
+        holder.time.setText(getTimerText(Float.parseFloat(r.getTime())));
     }
 
     @Override
@@ -58,5 +57,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         if(data==null)
             return 0;
         return data.size();
+    }
+    private String getTimerText(float time)
+    {
+        int rounded = (int) Math.round(time);
+
+        int seconds = ((rounded % 86400) % 3600) % 60;
+        int minutes = ((rounded % 86400) % 3600) / 60;
+        int hours = ((rounded % 86400) / 3600);
+
+        return formatTime(seconds, minutes, hours);
+    }
+
+    private String formatTime(int seconds, int minutes, int hours)
+    {
+        return String.format("%02d",hours) + " : " + String.format("%02d",minutes) + " : " + String.format("%02d",seconds);
     }
 }

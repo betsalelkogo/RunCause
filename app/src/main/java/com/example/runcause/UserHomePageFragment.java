@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -57,13 +58,12 @@ import java.util.List;
 public class UserHomePageFragment extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    EditText name,email_et,bYear,weight,height;
+    EditText name, email_et, bYear, weight, height;
     Button saveEditUser, cancelEditUser;
     UserProjectListFragmentViewModel viewModelProject;
     View view;
     TextView userName, email;
     User user;
-    List<Project> myProject=new ArrayList<>();
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToUserRunListFragment HomeToRunList;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentToRunScreenFragment UserToNewRun;
     UserHomePageFragmentDirections.ActionUserHomePageFragmentSelf UserToEditUser;
@@ -74,6 +74,7 @@ public class UserHomePageFragment extends Fragment {
     ProgressBar progressBar;
     AdapterProject adapter;
     Project project;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -85,11 +86,11 @@ public class UserHomePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_user_home_page, container, false);
-        user=UserHomePageFragmentArgs.fromBundle(getArguments()).getUser();
-        project=UserHomePageFragmentArgs.fromBundle(getArguments()).getProject();
-        userName= view.findViewById(R.id.user_page_name_tv);
-        email= view.findViewById(R.id.user_page_email_tv);
+        view = inflater.inflate(R.layout.fragment_user_home_page, container, false);
+        user = UserHomePageFragmentArgs.fromBundle(getArguments()).getUser();
+        project = UserHomePageFragmentArgs.fromBundle(getArguments()).getProject();
+        userName = view.findViewById(R.id.user_page_name_tv);
+        email = view.findViewById(R.id.user_page_email_tv);
         progressBar = view.findViewById(R.id.user_page_progressbar);
         swipeRefresh = view.findViewById(R.id.user_home_page_swip_refresh);
         swipeRefresh.setOnRefreshListener(() -> {
@@ -98,8 +99,8 @@ public class UserHomePageFragment extends Fragment {
             adapter.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
         });
-        userImage=view.findViewById(R.id.user_page_image);
-        editUserImg=view.findViewById(R.id.user_add_page_image_btn);
+        userImage = view.findViewById(R.id.user_page_image);
+        editUserImg = view.findViewById(R.id.user_add_page_image_btn);
         RecyclerView list = view.findViewById(R.id.user_page_project_list_tv);
         adapter = new AdapterProject();
         list.setAdapter(adapter);
@@ -114,20 +115,27 @@ public class UserHomePageFragment extends Fragment {
             public void onChanged(List<Project> posts) {
                 adapter.setFragment(UserHomePageFragment.this);
                 adapter.setData(viewModelProject.getData().getValue());
-                adapter.notifyDataSetChanged();}
+                adapter.notifyDataSetChanged();
+            }
         });
         progressBar.setVisibility(View.GONE);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user,viewModelProject.getData().getValue().get(position));
-                Navigation.findNavController(v).navigate(UserToNewRun);
+                if (viewModelProject.getData().getValue().get(position).isDone()) {
+                    Toast.makeText(MyApplication.getContext(),"This Project is COMPLETED",Toast.LENGTH_LONG).show();
+
+
+                } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user, viewModelProject.getData().getValue().get(position));
+                    Navigation.findNavController(v).navigate(UserToNewRun);
+                }
             }
         });
-        swipeRefresh.setRefreshing(Model.instance.getLoadingState().getValue()== LoadingState.loading);
-        Model.instance.getLoadingState().observe(getViewLifecycleOwner(),loadingState -> {
-            swipeRefresh.setRefreshing(loadingState== LoadingState.loading);
+        swipeRefresh.setRefreshing(Model.instance.getLoadingState().getValue() == LoadingState.loading);
+        Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+            swipeRefresh.setRefreshing(loadingState == LoadingState.loading);
         });
         editUserImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +153,7 @@ public class UserHomePageFragment extends Fragment {
         email.setText(user.getEmail());
         progressBar.setVisibility(View.GONE);
         userImage.setImageResource(R.drawable.userpage);
-        if(user.getImageUrl()!=null){
+        if (user.getImageUrl() != null) {
             Picasso.get().load(user.getImageUrl()).into(userImage);
         }
     }
@@ -154,6 +162,7 @@ public class UserHomePageFragment extends Fragment {
         Intent intent = getPickImageIntent(getActivity());
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constants.REQUEST_IMAGE_CAPTURE);
     }
+
     public static Intent getPickImageIntent(Context context) {
         Intent chooserIntent = null;
         List<Intent> intentList = new ArrayList<>();
@@ -219,6 +228,7 @@ public class UserHomePageFragment extends Fragment {
             }
         }
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -226,7 +236,7 @@ public class UserHomePageFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected( MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         boolean result = true;
         if (!super.onOptionsItemSelected(item)) {
             switch (item.getItemId()) {
@@ -241,7 +251,7 @@ public class UserHomePageFragment extends Fragment {
 
                     break;
                 case R.id.home_menu:
-                    UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user,project);
+                    UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user, project);
                     progressBar.setVisibility(View.VISIBLE);
                     System.out.println(user);
                     Navigation.findNavController(view).navigate(UserToNewRun);
@@ -263,7 +273,8 @@ public class UserHomePageFragment extends Fragment {
         }
         return result;
     }
-    private void update(){
+
+    private void update() {
         name.setText(user.getName());
         email_et.setText(user.getEmail());
         bYear.setText(user.getbYear());
@@ -280,29 +291,29 @@ public class UserHomePageFragment extends Fragment {
         user.setbYear(bYear.getText().toString());
         user.setWeight(weight.getText().toString());
         user.setHeight(height.getText().toString());
-        Model.instance.addUser(user,new AddUserListener(){
+        Model.instance.addUser(user, new AddUserListener() {
             @Override
             public void onComplete() {
-                UserToEditUser=UserHomePageFragmentDirections.actionUserHomePageFragmentSelf(user,project);
+                UserToEditUser = UserHomePageFragmentDirections.actionUserHomePageFragmentSelf(user, project);
                 Navigation.findNavController(view).navigate(UserToEditUser);
             }
         });
     }
 
-    public void createNewContactDialog(){
-        dialogBuilder=new AlertDialog.Builder(getContext());
-        final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_edit_user,null);
-        saveEditUser= contactPopupView.findViewById(R.id.edit_save_btn);
-        cancelEditUser=contactPopupView.findViewById(R.id.edit_cancel_btn);
-       name=contactPopupView.findViewById(R.id.edit_user_name_et);
-       email_et=contactPopupView.findViewById(R.id.edit_user_email_et);
-       bYear=contactPopupView.findViewById(R.id.edit_bYear_et);
-       weight=contactPopupView.findViewById(R.id.edit_weight_et);
-       height=contactPopupView.findViewById(R.id.edit_height_et);
-       update();
-       dialogBuilder.setView(contactPopupView);
-       dialog=dialogBuilder.create();
-       dialog.show();
+    public void createNewContactDialog() {
+        dialogBuilder = new AlertDialog.Builder(getContext());
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_edit_user, null);
+        saveEditUser = contactPopupView.findViewById(R.id.edit_save_btn);
+        cancelEditUser = contactPopupView.findViewById(R.id.edit_cancel_btn);
+        name = contactPopupView.findViewById(R.id.edit_user_name_et);
+        email_et = contactPopupView.findViewById(R.id.edit_user_email_et);
+        bYear = contactPopupView.findViewById(R.id.edit_bYear_et);
+        weight = contactPopupView.findViewById(R.id.edit_weight_et);
+        height = contactPopupView.findViewById(R.id.edit_height_et);
+        update();
+        dialogBuilder.setView(contactPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
 
 
         saveEditUser.setOnClickListener(new View.OnClickListener() {
@@ -321,4 +332,6 @@ public class UserHomePageFragment extends Fragment {
             }
         });
     }
+
+
 }

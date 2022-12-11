@@ -12,15 +12,14 @@ import com.example.runcause.model.intefaces.OnItemClickListener;
 
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
-    TextView nameTv;
-    TextView targetKm;
-    TextView doneKm;
+    TextView date;
+    TextView time;
 
     public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
         super(itemView);
-        nameTv = itemView.findViewById(R.id.listrow_name_tv);
-        targetKm = itemView.findViewById(R.id.listrow_target_km_tv);
-        doneKm = itemView.findViewById(R.id.listrow_km_done_tv2);
+        date = itemView.findViewById(R.id.date_run_tv);
+        time = itemView.findViewById(R.id.run_time_tv);
+
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

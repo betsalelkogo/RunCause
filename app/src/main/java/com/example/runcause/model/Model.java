@@ -15,6 +15,7 @@ import com.example.runcause.model.intefaces.DeleteRunListener;
 import com.example.runcause.model.intefaces.GetLocationListener;
 import com.example.runcause.model.intefaces.GetProjectByNameListener;
 import com.example.runcause.model.intefaces.GetUserByEmailListener;
+import com.example.runcause.model.intefaces.GetUsersLocationListener;
 import com.example.runcause.model.intefaces.UploadImageListener;
 
 import java.util.ArrayList;
@@ -176,7 +177,7 @@ public class Model {
                     //4. add new records to the local db
                     Long lLastUpdate = new Long(0);
                     for(Project p : list){
-                        if(p.isPublic()) {
+                        if(p.isPublic()&&!p.isDone()) {
                             projectList.add(p);
                             //AppLocalDB.db.projectDao().insertAll(p);
                         }
@@ -207,5 +208,11 @@ public class Model {
     }
     public void getLocations(Run r,GetLocationListener listener) {
         modelFirebase.getLocationForRun(r,listener);
+    }
+    public void addUserLocation(User user, Location location, AddLocationListener listener) {
+        modelFirebase.saveUserLocation(user,location,listener);
+    }
+    public void getUserLocations(GetUsersLocationListener listener) {
+        modelFirebase.getUserLocationForRun(listener);
     }
 }

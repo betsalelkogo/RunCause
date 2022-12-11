@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
@@ -31,21 +30,22 @@ import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.Run;
 import com.example.runcause.model.User;
+import com.example.runcause.model.UsersLocation;
 import com.example.runcause.model.adapter.PermissionCallback;
 import com.example.runcause.model.intefaces.AddLocationListener;
 import com.example.runcause.model.intefaces.AddProjectListener;
 import com.example.runcause.model.intefaces.AddRunListener;
+import com.example.runcause.model.intefaces.GetUsersLocationListener;
 import com.example.runcause.service.RunService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,8 +73,8 @@ public class RunScreenFragment extends Fragment {
     ArrayList<Location> locations;
     Run r;
     LatLng lastKnownLocation = null;
-
-
+    ArrayList<UsersLocation> usersLocations;
+    MarkerOptions[] marker;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,7 +87,17 @@ public class RunScreenFragment extends Fragment {
         totalTime = view.findViewById(R.id.tvTime);
         startRun = view.findViewById(R.id.btn_close_run_detailes);
         saveRun = view.findViewById(R.id.btnSaveJourney);
-
+        Model.instance.getUserLocations(new GetUsersLocationListener() {
+            @Override
+            public void onComplete(ArrayList<UsersLocation> arrLocation) {
+                usersLocations=arrLocation;
+                marker= new MarkerOptions[arrLocation.size()];
+                for(int i=0;i<usersLocations.size();i++){
+                    marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName());
+                    googleMap.addMarker(marker[i]);
+                }
+            }
+        });
         //todo: add the pause option for the timer
 
 
@@ -98,11 +108,13 @@ public class RunScreenFragment extends Fragment {
                 saveRun.setVisibility(View.VISIBLE);
                 StartTimer();
                 startGpsService();
+
             }
         });
         saveRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Model.instance.addUserLocation(user,locations.get(0),()->{});
                 saveRunToFirestore();
             }
         });
@@ -179,6 +191,7 @@ public class RunScreenFragment extends Fragment {
                             googleMap = map;
 
 
+
                             map.setMyLocationEnabled(true);
 
                         }
@@ -198,6 +211,7 @@ public class RunScreenFragment extends Fragment {
                 else
                     MainActivity.permissionCallback.onResult(true);
             }
+
         };
 
         map.onCreate(mapViewBundle);
@@ -281,6 +295,7 @@ public class RunScreenFragment extends Fragment {
     }
 
     private void StartTimer() {
+
         timerTask=new TimerTask() {
 
             @Override
@@ -294,24 +309,38 @@ public class RunScreenFragment extends Fragment {
                         time++;
                         totalTime.setText(getTimerText());
                         if(locations!=null){
-                            for(int i =0;i<locations.size();i++){
+                            Model.instance.addUserLocation(user,locations.get(0),()->{});
+                            for(int i =0;i<locations.size()-1;i++){
                                 averageTime.setText(new DecimalFormat("##.##").format(locations.get(i).getSpeed()));
                                 if(i>1){
-                                    int R = 6371; // km
-                                    double x = (locations.get(i).getLng() - locations.get(i-1).getLng()) * Math.cos((locations.get(i-1).getLat() + locations.get(i).getLat()) / 2);
-                                    double y = (locations.get(i).getLat()- locations.get(i-1).getLat());
-                                    distanceRun += (Math.sqrt(x * x + y * y) * R)/100;
+                                   distanceRun+= (float) distanceCalc(locations.get(i).getLat(),locations.get(i).getLng(),locations.get(i+1).getLat(),locations.get(i+1).getLng());
                                 }
                                 distance.setText(new DecimalFormat("##.##").format(distanceRun)+"KM");
                             }
                         }
                     }
+
+
                 });
 
                 }
             };
         timer.scheduleAtFixedRate(timerTask,0,1000);
         }
+    private double distanceCalc(double lat1, double lon1, double lat2, double lon2) {
+            // radius of earth in km
+            double R = 6371;
+
+            double dLat = Math.toRadians(lat2 - lat1);
+            double dLon = Math.toRadians(lon2 - lon1);
+
+            lat1 = Math.toRadians(lat1);
+            lat2 = Math.toRadians(lat2);
+
+            double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+            double c = 2 * Math.asin(Math.sqrt(a));
+            return R * c/100;
+    }
     private String getTimerText()
     {
         int rounded = (int) Math.round(time);
