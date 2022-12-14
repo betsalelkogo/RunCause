@@ -93,8 +93,10 @@ public class RunScreenFragment extends Fragment {
                 usersLocations=arrLocation;
                 marker= new MarkerOptions[arrLocation.size()];
                 for(int i=0;i<usersLocations.size();i++){
-                    marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName());
-                    googleMap.addMarker(marker[i]);
+                    if(!user.getName().equalsIgnoreCase(usersLocations.get(i).getName())){
+                        marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName());
+                        googleMap.addMarker(marker[i]);
+                    }
                 }
             }
         });
@@ -126,6 +128,10 @@ public class RunScreenFragment extends Fragment {
 
     private void saveRunToFirestore() {
         p.setRunDistance(String.valueOf(Float.parseFloat(p.getRunDistance())+distanceRun));
+        if(Float.parseFloat(p.getRunDistance())>=Float.parseFloat(p.getTotalDistance())){
+            p.setDone(true);
+            Toast.makeText(MyApplication.getContext(),"Project Target is COMPLETED!",Toast.LENGTH_LONG).show();
+        }
         timerTask.cancel();
         r = new Run();
         r.setDate(new Date().toString());
