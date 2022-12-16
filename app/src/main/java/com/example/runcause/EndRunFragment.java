@@ -176,7 +176,7 @@ public class EndRunFragment extends Fragment {
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.get(0).getLat(),locations.get(0).getLng()),12F));
 
                 googleMap.addPolyline(new PolylineOptions()
-                        .clickable(false).color(R.color.teal_200)
+                        .clickable(false).color(R.color.purple_500)
                         .addAll(list));
             }
         });

@@ -75,6 +75,8 @@ public class RunScreenFragment extends Fragment {
     LatLng lastKnownLocation = null;
     ArrayList<UsersLocation> usersLocations;
     MarkerOptions[] marker;
+    boolean isPause=false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,10 +109,17 @@ public class RunScreenFragment extends Fragment {
         startRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isPause){
                 saveRun.setVisibility(View.VISIBLE);
                 StartTimer();
                 startGpsService();
-
+                startRun.setText("PAUSE");
+                isPause=true;
+                }
+                else{
+                    isPause=false;
+                   //todo: pause here
+                }
             }
         });
         saveRun.setOnClickListener(new View.OnClickListener() {
