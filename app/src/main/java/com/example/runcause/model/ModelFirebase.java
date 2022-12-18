@@ -283,7 +283,7 @@ public class ModelFirebase {
         json.put("userName", user.getName());
         json.put("ttl", new Date());
         db.collection(Constants.MODEL_FIRE_BASE_USERS_LOCATION_COLLECTION)
-                .document().set(json)
+                .document(user.getName()).set(json)
                 .addOnSuccessListener((successListener) -> {
                     listener.onComplete();
                 })

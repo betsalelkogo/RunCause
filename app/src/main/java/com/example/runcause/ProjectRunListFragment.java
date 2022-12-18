@@ -104,7 +104,6 @@ public class ProjectRunListFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
-
         return view;
     }
 

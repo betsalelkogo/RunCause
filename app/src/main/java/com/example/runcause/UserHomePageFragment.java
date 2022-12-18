@@ -109,7 +109,6 @@ public class UserHomePageFragment extends Fragment {
         list.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
         list.addItemDecoration(dividerItemDecoration);
-        setHasOptionsMenu(true);
         viewModelProject.getData().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
             @Override
             public void onChanged(List<Project> posts) {
@@ -249,12 +248,6 @@ public class UserHomePageFragment extends Fragment {
                 case R.id.edit_user:
                     createNewContactDialog();
 
-                    break;
-                case R.id.home_menu:
-                    UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user, project);
-                    progressBar.setVisibility(View.VISIBLE);
-                    System.out.println(user);
-                    Navigation.findNavController(view).navigate(UserToNewRun);
                     break;
                 case R.id.new_project:
                     UserToAddProject = UserHomePageFragmentDirections.actionUserHomePageFragmentToAddRunProjectFragment(user);

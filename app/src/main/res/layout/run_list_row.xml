@@ -10,20 +10,20 @@
 
     <TextView
         android:id="@+id/run_time_tv"
-        android:layout_width="92dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="117dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="4dp"
         android:text="12:00:05"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" />
+        app:layout_constraintVertical_bias="0.658" />
 
     <TextView
         android:id="@+id/date_run_tv"
-        android:layout_width="130dp"
-        android:layout_height="38dp"
+        android:layout_width="124dp"
+        android:layout_height="65dp"
         android:layout_marginStart="8dp"
         android:text="Thu Dec 08"
         android:textSize="24sp"

@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -41,6 +44,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -76,6 +81,7 @@ public class RunScreenFragment extends Fragment {
     ArrayList<UsersLocation> usersLocations;
     MarkerOptions[] marker;
     boolean isPause=false;
+    boolean addUserLocation=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,7 +102,7 @@ public class RunScreenFragment extends Fragment {
                 marker= new MarkerOptions[arrLocation.size()];
                 for(int i=0;i<usersLocations.size();i++){
                     if(!user.getName().equalsIgnoreCase(usersLocations.get(i).getName())){
-                        marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName());
+                        marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName()).icon(BitmapFromVector(MyApplication.getContext(), R.drawable.ic_baseline_directions_run_24));
                         googleMap.addMarker(marker[i]);
                     }
                 }
@@ -134,7 +140,27 @@ public class RunScreenFragment extends Fragment {
 
         return view;
     }
+    private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
+        // below line is use to generate a drawable.
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
 
+        // below line is use to set bounds to our vector drawable.
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+
+        // below line is use to create a bitmap for our
+        // drawable which we have added.
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+        // below line is use to add bitmap in our canvas.
+        Canvas canvas = new Canvas(bitmap);
+
+        // below line is use to draw our
+        // vector drawable in canvas.
+        vectorDrawable.draw(canvas);
+
+        // after generating our bitmap we are returning our bitmap.
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
     private void saveRunToFirestore() {
         p.setRunDistance(String.valueOf(Float.parseFloat(p.getRunDistance())+distanceRun));
         if(Float.parseFloat(p.getRunDistance())>=Float.parseFloat(p.getTotalDistance())){
@@ -324,7 +350,10 @@ public class RunScreenFragment extends Fragment {
                         time++;
                         totalTime.setText(getTimerText());
                         if(locations!=null){
-                            Model.instance.addUserLocation(user,locations.get(0),()->{});
+                            if(!addUserLocation){
+                                addUserLocation=true;
+                                Model.instance.addUserLocation(user,locations.get(0),()->{});
+                            }
                             for(int i =0;i<locations.size()-1;i++){
                                 averageTime.setText(new DecimalFormat("##.##").format(locations.get(i).getSpeed()));
                                 if(i>1){
