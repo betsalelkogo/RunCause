@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.runcause.UI.ListProjectFragmentViewModel;
+import com.example.runcause.UI.RunsListFragmentViewModel;
 import com.example.runcause.UI.UserProjectListFragmentViewModel;
 import com.example.runcause.UI.UserRunListFragmentViewModel;
 import com.example.runcause.model.LoadingState;
@@ -45,7 +46,7 @@ import java.util.List;
 public class UserRunListFragment extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    UserRunListFragmentViewModel viewModel;
+    RunsListFragmentViewModel viewModel;
     View view;
     MyAdapter adapter;
     User user;
@@ -54,7 +55,7 @@ public class UserRunListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(UserRunListFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(RunsListFragmentViewModel.class);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +63,7 @@ public class UserRunListFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_user_run_list, container, false);
         user=UserRunListFragmentArgs.fromBundle(getArguments()).getUser();
+        viewModel.setData(user);
         progressBar = view.findViewById(R.id.list_run_progressbar);
         swipeRefresh = view.findViewById(R.id.run_list_swipe_refresh);
         swipeRefresh.setOnRefreshListener(() -> {
@@ -82,7 +84,7 @@ public class UserRunListFragment extends Fragment {
 
         viewModel.getData().observe(getViewLifecycleOwner(),runs -> {
             adapter.setFragment(UserRunListFragment.this);
-            adapter.setData(runs);
+            adapter.setData(viewModel.getData().getValue());
             adapter.notifyDataSetChanged();
         });
         progressBar.setVisibility(View.GONE);

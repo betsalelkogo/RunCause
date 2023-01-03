@@ -26,6 +26,7 @@ public class Model {
     MutableLiveData<LoadingState> loadingState= new MutableLiveData<LoadingState>();
     public LiveData<LoadingState> getLoadingState(){return loadingState;}
     MutableLiveData<List<Run>> runsListLd = new MutableLiveData<List<Run>>();
+    MutableLiveData<List<Run>> runsUserListLd = new MutableLiveData<List<Run>>();
     MutableLiveData<List<Project>> projectListLd = new MutableLiveData<List<Project>>();
     MutableLiveData<List<Project>> allProjectListLd = new MutableLiveData<List<Project>>();
 
@@ -37,6 +38,9 @@ public class Model {
     }
     public LiveData<List<Run>> getAllRun() {
         return runsListLd;
+    }
+    public LiveData<List<Run>> getUserRun(String email) {
+        return reloadUserRunsList(email);
     }
     public LiveData<List<Project>> getProject() {
         return projectListLd;
@@ -82,7 +86,35 @@ public class Model {
             }
         });
     }
-
+    public MutableLiveData<List<Run>> reloadUserRunsList(String email) {
+        loadingState.setValue(LoadingState.loading);
+        //1. get local last update
+        Long localLastUpdate = Run.getLocalLastUpdated();
+        //2. get all students record since local last update from firebase
+        List<Run> stList=new ArrayList<>();
+        modelFirebase.getAllRuns(localLastUpdate,(list)->{
+            if(list !=null){
+                MyApplication.executorService.execute(()->{
+                    //3. update local last update date
+                    //4. add new records to the local db
+                    Long lLastUpdate = new Long(0);
+                    for(Run r : list){
+                        if(!r.isDeleted()&&r.getUser().equalsIgnoreCase(email)) {
+                            stList.add(r);
+                        }
+                        if (r.getLastUpdated() > lLastUpdate){
+                            lLastUpdate = r.getLastUpdated();
+                        }
+                    }
+                    Run.setLocalLastUpdated(lLastUpdate);
+                    //5. return all records to the caller
+                    runsUserListLd.postValue(stList);
+                    loadingState.postValue(LoadingState.loaded);
+                });
+            }
+        });
+        return runsUserListLd;
+    }
     public void addRun(Run run, AddRunListener listener){
         modelFirebase.addRun(run,()->{
             reloadRunsList();

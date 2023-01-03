@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_userHomePageFragment_self"
             app:destination="@id/userHomePageFragment" />
+        <action
+            android:id="@+id/action_userHomePageFragment_to_userStatistcProjectFragment"
+            app:destination="@id/userStatistcProjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/runScreenFragment"
@@ -134,5 +137,14 @@
         <argument
             android:name="user"
             app:argType="com.example.runcause.model.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/userStatistcProjectFragment"
+        android:name="com.example.runcause.UserStatistcProjectFragment"
+        android:label="Project Statistics "
+        tools:layout="@layout/fragment_user_statistc_project">
+        <action
+            android:id="@+id/action_userStatistcProjectFragment_to_userHomePageFragment"
+            app:destination="@id/userHomePageFragment" />
     </fragment>
 </navigation>
