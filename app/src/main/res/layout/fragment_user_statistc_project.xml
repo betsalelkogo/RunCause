@@ -7,9 +7,10 @@
     tools:context=".UserStatistcProjectFragment">
 
     <TableLayout
-        android:layout_width="422dp"
-        android:layout_height="374dp"
-        android:layout_margin="40dp"
+        android:id="@+id/tableLayout"
+        android:layout_width="401dp"
+        android:layout_height="408dp"
+        android:layout_margin="10dp"
         android:background="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -363,9 +364,54 @@
 
         </TableRow>
 
+        <TableRow>
+
+            <TextView
+                android:id="@+id/email_table_9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:text=""
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/total_km_table_9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:text=""
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/total_time_table_9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:text=""
+                android:textSize="12sp" />
+
+        </TableRow>
+
 
     </TableLayout>
 
+    <Button
+        android:id="@+id/statistic_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="close"
+        android:backgroundTint="#FFD740"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

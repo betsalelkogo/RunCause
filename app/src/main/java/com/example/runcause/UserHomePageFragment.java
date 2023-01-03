@@ -256,7 +256,8 @@ public class UserHomePageFragment extends Fragment {
                     Navigation.findNavController(view).navigate(UserToAddProject);
                     break;
                 case R.id.project_statistics:
-                    Navigation.findNavController(view).navigate(R.id.action_userHomePageFragment_to_userStatistcProjectFragment);
+                    UserHomePageFragmentDirections.ActionUserHomePageFragmentToUserStatistcProjectFragment action =UserHomePageFragmentDirections.actionUserHomePageFragmentToUserStatistcProjectFragment(user,project);
+                    Navigation.findNavController(view).navigate(action);
                     break;
                 case R.id.logout_menu:
                     FirebaseAuth.getInstance().signOut();
