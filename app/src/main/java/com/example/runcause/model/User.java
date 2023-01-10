@@ -45,6 +45,7 @@ public class User implements Parcelable {
         imageUrl = in.readString();
         weight = in.readString();
         height = in.readString();
+        haveProject = in.readByte() != 0;
         bYear = in.readString();
         myList = in.createStringArrayList();
     }
@@ -148,22 +149,7 @@ public class User implements Parcelable {
 
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(password);
-        parcel.writeString(email);
-        parcel.writeString(imageUrl);
-        parcel.writeString(bYear);
-        parcel.writeString(weight);
-        parcel.writeString(height);
-        parcel.writeList(myList);
-    }
 
     public List<String> getMyList() {
         return myList;
@@ -179,5 +165,23 @@ public class User implements Parcelable {
 
     public void setHaveProject(boolean haveProject) {
         this.haveProject = haveProject;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(password);
+        dest.writeString(email);
+        dest.writeString(imageUrl);
+        dest.writeString(weight);
+        dest.writeString(height);
+        dest.writeByte((byte) (haveProject ? 1 : 0));
+        dest.writeString(bYear);
+        dest.writeStringList(myList);
     }
 }

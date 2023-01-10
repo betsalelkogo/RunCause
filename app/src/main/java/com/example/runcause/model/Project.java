@@ -30,6 +30,7 @@ public class Project implements Parcelable {
     private String ttl;
     private String name;
     private boolean isPublic;
+    private boolean isDeleted;
     private boolean done=false;
     private Long lastUpdated = new Long(0);
 
@@ -41,6 +42,7 @@ public class Project implements Parcelable {
         this.projectDetails=projectDetails;
         this.projectName=projectName;
         this.name=name;
+        this.isDeleted=false;
     }
     @Ignore
     public Project() {
@@ -56,6 +58,7 @@ public class Project implements Parcelable {
         ttl = in.readString();
         name = in.readString();
         isPublic = in.readByte() != 0;
+        isDeleted = in.readByte() != 0;
         done = in.readByte() != 0;
         if (in.readByte() == 0) {
             lastUpdated = null;
@@ -86,6 +89,7 @@ public class Project implements Parcelable {
         json.put("projectDetails", getProjectDetails());
         json.put("name", getName());
         json.put("done", isDone());
+        json.put("isDeleted", isDeleted());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
     }
@@ -103,9 +107,11 @@ public class Project implements Parcelable {
         String name = (String)json.get("name");
         boolean isPublic = (boolean)json.get("isPublic");
         boolean isDone = (boolean)json.get("done");
+        boolean isDeleted = (boolean)json.get("isDeleted");
         Project p = new Project(totalDistance,runDistance,ttl,isPublic,projectName,projectDetails,name);
         p.setPublic(isPublic);
         p.setDone(isDone);
+        p.setDeleted(isDeleted);
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
         p.setLastUpdated(new Long(ts.getSeconds()));
         return p;
@@ -194,21 +200,26 @@ public class Project implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id_key);
-        parcel.writeString(totalDistance);
-        parcel.writeString(runDistance);
-        parcel.writeString(projectName);
-        parcel.writeString(projectDetails);
-        parcel.writeString(ttl);
-        parcel.writeByte((byte) (isPublic ? 1 : 0));
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(id_key);
+        dest.writeString(totalDistance);
+        dest.writeString(runDistance);
+        dest.writeString(projectName);
+        dest.writeString(projectDetails);
+        dest.writeString(ttl);
+        dest.writeString(name);
+        dest.writeByte((byte) (isPublic ? 1 : 0));
+        dest.writeByte((byte) (isDeleted ? 1 : 0));
+        dest.writeByte((byte) (done ? 1 : 0));
         if (lastUpdated == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(lastUpdated);
+            dest.writeByte((byte) 1);
+            dest.writeLong(lastUpdated);
         }
     }
+
 
     public String getName() {
         return name;
@@ -224,5 +235,13 @@ public class Project implements Parcelable {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

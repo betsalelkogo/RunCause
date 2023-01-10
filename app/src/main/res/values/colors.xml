@@ -15,5 +15,7 @@
         <color name="colorGreen">#A40E0227</color>
         <color name="graphColor">#008cef</color>
         <color name="graphLabelColor">#6A6A6A</color>
+    <color name="colorPrimary">#A40E0227</color>
+    <color name="colorAccent">#FFD740</color>
 
 </resources>

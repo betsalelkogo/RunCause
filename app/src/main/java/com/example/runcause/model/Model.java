@@ -169,7 +169,7 @@ public class Model {
                     Long lLastUpdate = new Long(0);
                     for(Project p : list){
                         for(int i=0;i<u.getMyList().size();i++){
-                        if(p.isPublic()&&p.getId_key().equalsIgnoreCase(u.getMyList().get(i))) {
+                        if(!p.isDeleted()&&p.isPublic()&&p.getId_key().equalsIgnoreCase(u.getMyList().get(i))) {
                             //AppLocalDB.db.projectDao().insertAll(p);
                             projectList.add(p);
                         }
@@ -177,19 +177,9 @@ public class Model {
                             lLastUpdate = p.getLastUpdated();
                         }
                     }
-                        if(u.getMyList().size()== 0) {
-                           // AppLocalDB.db.projectDao().delete(p);
-                        }
                     }
                     Project.setLocalLastUpdated(lLastUpdate);
                     //5. return all records to the caller
-                    //List<Project> projectList = AppLocalDB.db.projectDao().getAll();
-                    for (Project p: projectList){
-                        for(int i=0;i<u.getMyList().size();i++){
-                        if(!p.isPublic()||!p.getId_key().equalsIgnoreCase(u.getMyList().get(i))){
-                           // AppLocalDB.db.projectDao().delete(p);
-                        }
-                    }}
                     projectListLd.postValue(projectList);
                     loadingState.postValue(LoadingState.loaded);
                 });
@@ -209,7 +199,7 @@ public class Model {
                     //4. add new records to the local db
                     Long lLastUpdate = new Long(0);
                     for(Project p : list){
-                        if(p.isPublic()&&!p.isDone()) {
+                        if(!p.isDeleted()&&p.isPublic()&&!p.isDone()) {
                             projectList.add(p);
                             //AppLocalDB.db.projectDao().insertAll(p);
                         }
@@ -222,12 +212,6 @@ public class Model {
                     }
                     Project.setLocalLastUpdated(lLastUpdate);
                     //5. return all records to the caller
-                    //List<Project> projectList = AppLocalDB.db.projectDao().getAll();
-                    for (Project p: projectList){
-                        if(!p.isPublic()){
-                            //AppLocalDB.db.projectDao().delete(p);
-                        }
-                    }
                     allProjectListLd.postValue(projectList);
                     loadingState.postValue(LoadingState.loaded);
                 });

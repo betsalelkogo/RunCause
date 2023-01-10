@@ -13,23 +13,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.runcause.UI.RunsListFragmentViewModel;
 import com.example.runcause.UI.UserRunListFragmentViewModel;
+import com.example.runcause.model.Model;
 import com.example.runcause.model.Project;
 import com.example.runcause.model.User;
+import com.example.runcause.model.intefaces.AddProjectListener;
 
 public class UserStatistcProjectFragment extends Fragment {
     View view;
     TextView projectName;
     UserRunListFragmentViewModel viewModel;
-    Button close;
+    Button close, delete;
     User user;
     Project project;
-
+    int progress = 0;
+    ProgressBar progressBar;
+    TextView textViewProgress;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -46,6 +52,23 @@ public class UserStatistcProjectFragment extends Fragment {
         projectName=view.findViewById(R.id.project_name_tv);
         projectName.setText(project.getProjectName());
         close = view.findViewById(R.id.statistic_btn);
+        progressBar = view.findViewById(R.id.progress_bar);
+        textViewProgress = view.findViewById(R.id.text_view_progress);
+        delete=view.findViewById(R.id.delete_project_btn);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                project.setDeleted(true);
+                Model.instance.addProject(project, new AddProjectListener() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(MyApplication.getContext(),"This Project is noe Deleted",Toast.LENGTH_LONG).show();
+                        UserStatistcProjectFragmentDirections.ActionUserStatistcProjectFragmentToUserHomePageFragment action = UserStatistcProjectFragmentDirections.actionUserStatistcProjectFragmentToUserHomePageFragment(user, project);
+                        Navigation.findNavController(view).navigate(action);
+                    }
+                });
+            }
+        });
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,9 +129,15 @@ public class UserStatistcProjectFragment extends Fragment {
                 stk.addView(tbrow);
             }
         }
+        updateProgressBar();
 
     }
-
+    private void updateProgressBar()
+    {
+        progress= (int) ((Float.parseFloat(project.getRunDistance())/Float.parseFloat(project.getTotalDistance()))*100);
+        progressBar.setProgress(progress);
+        textViewProgress.setText(progress + "%");
+    }
     private String getTimerText(String time)
     {
         int rounded = (int) Math.round(Float.parseFloat(time));

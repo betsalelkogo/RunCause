@@ -18,7 +18,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="CircularDeterminateProgressBar">
+    <item name="android:indeterminateOnly">false</item>
+    <item name="android:progressDrawable">@drawable/circle</item>
+</style>
     <style name="Theme.RunCause.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.RunCause.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
