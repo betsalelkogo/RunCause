@@ -71,7 +71,7 @@ public class AddRunProjectFragment extends Fragment {
         p.setPublic(checkBox_Public.isChecked());
         p.setName(user.getName());
         user.getMyList().add(p.getId_key());
-
+        user.setHaveProject(true);
         Model.instance.addProject(p, () -> {
         Model.instance.addUser(user,()->Navigation.findNavController(sendBtn).navigateUp());
 

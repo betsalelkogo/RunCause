@@ -59,7 +59,7 @@ public class UserHomePageFragment extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     EditText name, email_et, bYear, weight, height;
-    Button saveEditUser, cancelEditUser;
+    Button saveEditUser, cancelEditUser,runBtn,statisticsBtn ;
     UserProjectListFragmentViewModel viewModelProject;
     View view;
     TextView userName, email;
@@ -121,16 +121,24 @@ public class UserHomePageFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                if (viewModelProject.getData().getValue().get(position).isDone()) {
-                    Toast.makeText(MyApplication.getContext(),"This Project is COMPLETED",Toast.LENGTH_LONG).show();
+                if(user.isHaveProject()){
+                    openStatistics(position);
+                }
+
+                else{
+                    if (viewModelProject.getData().getValue().get(position).isDone()) {
+                        Toast.makeText(MyApplication.getContext(),"This Project is COMPLETED",Toast.LENGTH_LONG).show();
 
 
-                } else {
-                    progressBar.setVisibility(View.VISIBLE);
-                    UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user, viewModelProject.getData().getValue().get(position));
-                    Navigation.findNavController(v).navigate(UserToNewRun);
+                    } else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user, viewModelProject.getData().getValue().get(position));
+                        Navigation.findNavController(v).navigate(UserToNewRun);
+                    }
                 }
             }
+
+
         });
         swipeRefresh.setRefreshing(Model.instance.getLoadingState().getValue() == LoadingState.loading);
         Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
@@ -147,6 +155,39 @@ public class UserHomePageFragment extends Fragment {
         return view;
     }
 
+    private void openStatistics(int position) {
+        dialogBuilder=new AlertDialog.Builder(getContext());
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.user_statistics_popup,null);
+        runBtn=contactPopupView.findViewById(R.id.run_btn);
+        statisticsBtn=contactPopupView.findViewById(R.id.statistic_btn);
+        dialogBuilder.setView(contactPopupView);
+        dialog=dialogBuilder.create();
+        dialog.show();
+        runBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                if (viewModelProject.getData().getValue().get(position).isDone()) {
+                    Toast.makeText(MyApplication.getContext(),"This Project is COMPLETED",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    UserToNewRun = UserHomePageFragmentDirections.actionUserHomePageFragmentToRunScreenFragment(user, viewModelProject.getData().getValue().get(position));
+                    Navigation.findNavController(view).navigate(UserToNewRun);
+                }
+                dialog.dismiss();
+
+            }
+        });
+
+        statisticsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                UserHomePageFragmentDirections.ActionUserHomePageFragmentToUserStatistcProjectFragment action =UserHomePageFragmentDirections.actionUserHomePageFragmentToUserStatistcProjectFragment(user,viewModelProject.getData().getValue().get(position));
+                Navigation.findNavController(view).navigate(action);
+                dialog.dismiss();
+            }
+        });
+    }
     private void updateUserPage() {
         userName.setText(user.getName());
         email.setText(user.getEmail());
@@ -254,10 +295,6 @@ public class UserHomePageFragment extends Fragment {
                     progressBar.setVisibility(View.VISIBLE);
                     System.out.println(user);
                     Navigation.findNavController(view).navigate(UserToAddProject);
-                    break;
-                case R.id.project_statistics:
-                    UserHomePageFragmentDirections.ActionUserHomePageFragmentToUserStatistcProjectFragment action =UserHomePageFragmentDirections.actionUserHomePageFragmentToUserStatistcProjectFragment(user,project);
-                    Navigation.findNavController(view).navigate(action);
                     break;
                 case R.id.logout_menu:
                     FirebaseAuth.getInstance().signOut();

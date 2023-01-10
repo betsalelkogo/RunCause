@@ -22,16 +22,18 @@ public class User implements Parcelable {
     private String imageUrl;
     private String weight;
     private String height;
+    private boolean haveProject;
     protected String bYear;
     private List<String> myList=new ArrayList<>();
 
-    public User(String name,String password,String email,String bYear,String weight,String height){
+    public User(String name, String password, String email, String bYear, String weight, String height, boolean haveProject){
         this.name=name;
         this.password=password;
         this.email=email;
         this.bYear=bYear;
         this.weight=weight;
         this.height=height;
+        this.haveProject = haveProject;
         this.imageUrl=null;
     }
 
@@ -121,6 +123,7 @@ public class User implements Parcelable {
         json.put("bYear", getbYear());
         json.put("weight", getWeight());
         json.put("myListProject", getMyList());
+        json.put("haveProject", isHaveProject());
         return json;
     }
 
@@ -135,8 +138,9 @@ public class User implements Parcelable {
         String height = (String)json.get("height");
         String bYear = (String)json.get("bYear");
         String weight = (String)json.get("weight");
+        boolean haveProject=(boolean)json.get("haveProject");
         List<String> myListProject = (List<String>) json.get("myListProject");
-        User u = new User(name,password,email,bYear,weight,height);
+        User u = new User(name,password,email,bYear,weight,height, haveProject);
         u.setMyList(myListProject);
         u.setImageUrl(imageUrl);
         return u;
@@ -167,5 +171,13 @@ public class User implements Parcelable {
 
     public void setMyList(List<String> myList) {
         this.myList = myList;
+    }
+
+    public boolean isHaveProject() {
+        return haveProject;
+    }
+
+    public void setHaveProject(boolean haveProject) {
+        this.haveProject = haveProject;
     }
 }

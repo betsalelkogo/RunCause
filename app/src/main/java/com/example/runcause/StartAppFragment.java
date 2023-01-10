@@ -208,7 +208,7 @@ public class StartAppFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign up success, update UI with the signed-in user's information
-                            User user=new User(name.getText().toString(),passwordRegister.getText().toString(),email_register.getText().toString(),bYear.getText().toString(),weight.getText().toString(),height.getText().toString());
+                            User user=new User(name.getText().toString(),passwordRegister.getText().toString(),email_register.getText().toString(),bYear.getText().toString(),weight.getText().toString(),height.getText().toString(),false);
                             Model.instance.addUser(user, ()->{
                                //open the login popup
                             });

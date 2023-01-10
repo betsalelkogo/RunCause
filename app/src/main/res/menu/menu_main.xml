@@ -16,11 +16,7 @@
         android:orderInCategory="101"
         android:title="Add New Project"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/project_statistics"
-        android:orderInCategory="101"
-        android:title="Project Statistics"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/logout_menu"
         android:orderInCategory="101"
