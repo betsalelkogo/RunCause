@@ -2,6 +2,7 @@ package com.example.runcause;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -61,12 +62,14 @@ import java.util.TimerTask;
 
 
 public class RunScreenFragment extends Fragment {
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
     MapView map;
     GoogleMap googleMap;
     TextView averageTime, distance, totalTime;
     View view;
     OnMapReadyCallback onMapReadyCallback;
-    Button startRun, saveRun ;
+    Button startRun, saveRun,seeOtherYes,seeOtherNo;
     Timer timer;
     TimerTask timerTask;
     Project p;
@@ -74,6 +77,7 @@ public class RunScreenFragment extends Fragment {
     Double time = 0.0;
     float distanceRun =0;
     boolean isTracking = false;
+    boolean shareLocation = true;
     static Handler handler;
     ArrayList<Location> locations;
     Run r;
@@ -95,22 +99,8 @@ public class RunScreenFragment extends Fragment {
         totalTime = view.findViewById(R.id.tvTime);
         startRun = view.findViewById(R.id.btn_close_run_detailes);
         saveRun = view.findViewById(R.id.btnSaveJourney);
-        Model.instance.getUserLocations(new GetUsersLocationListener() {
-            @Override
-            public void onComplete(ArrayList<UsersLocation> arrLocation) {
-                usersLocations=arrLocation;
-                marker= new MarkerOptions[arrLocation.size()];
-                for(int i=0;i<usersLocations.size();i++){
-                    if(!user.getName().equalsIgnoreCase(usersLocations.get(i).getName())){
-                        marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName()).icon(BitmapFromVector(MyApplication.getContext(), R.drawable.ic_baseline_directions_run_24));
-                        googleMap.addMarker(marker[i]);
-                    }
-                }
-            }
-        });
+        seeOtherLocationDialog();
         //todo: add the pause option for the timer
-
-
         timer = new Timer();
         startRun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,13 +121,12 @@ public class RunScreenFragment extends Fragment {
         saveRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Model.instance.addUserLocation(user,locations.get(0),()->{});
+                if(shareLocation){Model.instance.addUserLocation(user,locations.get(0),()->{});}
                 saveRunToFirestore();
             }
         });
         InitialGoogleMap(savedInstanceState);
         setLocationBroadcast();
-
         return view;
     }
     private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
@@ -350,7 +339,7 @@ public class RunScreenFragment extends Fragment {
                         time++;
                         totalTime.setText(getTimerText());
                         if(locations!=null){
-                            if(!addUserLocation){
+                            if(!addUserLocation&&shareLocation){
                                 addUserLocation=true;
                                 Model.instance.addUserLocation(user,locations.get(0),()->{});
                             }
@@ -399,6 +388,52 @@ public class RunScreenFragment extends Fragment {
     private String formatTime(int seconds, int minutes, int hours)
     {
         return String.format("%02d",hours) + " : " + String.format("%02d",minutes) + " : " + String.format("%02d",seconds);
+    }
+
+
+    private void seeOtherLocationDialog(){
+        TextView tv;
+        dialogBuilder=new AlertDialog.Builder(getContext());
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.popup_location_user,null);
+        seeOtherYes=contactPopupView.findViewById(R.id.popup_location_yes);
+        seeOtherNo=contactPopupView.findViewById(R.id.popup_location_no);
+        tv=contactPopupView.findViewById(R.id.popup_text_v);
+        tv.setText("Would you like to see other runners' locations and share your location with them?");
+        dialogBuilder.setView(contactPopupView);
+        dialog=dialogBuilder.create();
+        dialog.show();
+        seeOtherYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                shareLocation=true;
+                applayOtherLocation();
+                dialog.dismiss();
+
+            }
+        });
+        seeOtherNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                shareLocation=false;
+                dialog.dismiss();
+            }
+        });
+    }
+    private void applayOtherLocation(){
+        Model.instance.getUserLocations(new GetUsersLocationListener() {
+            @Override
+            public void onComplete(ArrayList<UsersLocation> arrLocation) {
+                usersLocations=arrLocation;
+                marker= new MarkerOptions[arrLocation.size()];
+                for(int i=0;i<usersLocations.size();i++){
+                    if(!user.getName().equalsIgnoreCase(usersLocations.get(i).getName())){
+                        marker[i]=new MarkerOptions().position(new LatLng(usersLocations.get(i).getLat(), usersLocations.get(i).getLng())).title(usersLocations.get(i).getName()).icon(BitmapFromVector(MyApplication.getContext(), R.drawable.ic_baseline_directions_run_24));
+                        googleMap.addMarker(marker[i]);
+                    }
+                }
+            }
+        });
+
     }
 
 }

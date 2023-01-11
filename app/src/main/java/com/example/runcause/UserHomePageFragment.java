@@ -152,6 +152,7 @@ public class UserHomePageFragment extends Fragment {
         });
         updateUserPage();
         setHasOptionsMenu(true);
+        Model.instance.reloadProjectList(user);
         return view;
     }
 
